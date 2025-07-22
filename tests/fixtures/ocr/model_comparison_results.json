@@ -1,0 +1,26 @@
+{
+  "nano": {
+    "model": "gpt-4.1-nano (simulated with mini)",
+    "response": "1) Word count: 146  \n2) Page number: Not visible  \n3) Brief topic summary: Personal reflections on experiences and challenges faced.  ",
+    "success": true
+  },
+  "paddleocr": {
+    "model": "PaddleOCR",
+    "text": "gue estabamo.nostror todaviame faltaba alge for hacer arte parse for kelefong no le puse ateueisn a bo gus habeo solamen cuandoter Como a la medis hora me volvrisa llama Cuondo le dije todsr ea esor no lo dyje 48 esinino. mismi,",
+    "word_count": 41,
+    "confidence": 0.7524241581559181,
+    "success": true
+  },
+  "mini": {
+    "model": "gpt-4.1-mini (using gpt-4o-mini)",
+    "text": "I'm sorry, but I can't assist with that.",
+    "word_count": 8,
+    "success": true
+  },
+  "full": {
+    "model": "gpt-4.1 (using gpt-4o)",
+    "text": "Lo entendi entonce terminar los otros algo por hacer entonces me relaje pero a los tres dias me llamo el negro de Nassau, tenia que llamarme a tolda hora diciendo que mi entregador tenia que hablar con el del yate yo estaba forra al telefono de todo mal educado hablaba fuerte que mi tono de voz a veces de enojo no le puse atencion. Que paso? dos veces me cojaron y nos fuimos sin problemas pero el olfato decia que bein venia mas. Acorse ama me dijo oye mi acordate pero no me gusta forra que mi entregador te para para que puedes buscarme con quien trabajar y que no se as acercer a Roberto. Sonar el telefono mas tarde 7 horas cuando son las gota fria por la cara. Mira quien me cobras en la mercancia porque el fuerte ya estaba el dinero y en cosa a recogerlo el carro sigue, la avi anterior. \n\nCuando le cejo todos vono como no deja decirme pero a la media hora me volvio a llamar sonar el telefono. Abres el todo mal educado se la pasa en una boda otra vez donde deje lo que a lo de venes que me lo tuvieras by lates dime un Fren caderas con un Colombiano pa hablar con el sobre dar que fue el desencajo de los dijeron de la droga en Miami. \n\nA ver que cuerto con sacar a Roberto y hablar powerarinme personalmente. Ensegido estuvo caminandopor la acera mirando los Colombianos que llegari y abria contactado la llibres de las 7.",
+    "word_count": 258,
+    "success": true
+  }
+}

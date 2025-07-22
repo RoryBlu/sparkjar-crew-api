@@ -1,0 +1,29 @@
+parse_input:
+  description: >
+    Parse the raw import payload into structured entity and relationship data.
+  expected_output: Parsed entities and relationships ready for disambiguation.
+  agent: input_parser
+
+disambiguate_entities:
+  description: >
+    Resolve ambiguous names and map them to existing entity IDs in memory.
+  expected_output: Entities with resolved identifiers and any new entities marked.
+  agent: disambiguator
+
+write_entities:
+  description: >
+    Create or update entities in the memory system using the parsed input.
+  expected_output: Summary of entity creation or update operations.
+  agent: entity_writer
+
+write_relations:
+  description: >
+    Create relationships between the imported entities in memory.
+  expected_output: Summary of relationships created or updated.
+  agent: relation_writer
+
+verify_import:
+  description: >
+    Verify that all entities and relationships were stored correctly in memory.
+  expected_output: Verification report confirming import success.
+  agent: verifier

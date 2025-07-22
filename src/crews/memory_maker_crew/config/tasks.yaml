@@ -1,0 +1,70 @@
+analyze_text:
+  description: >
+    Analyze the provided text content to identify and extract:
+    1. Entities mentioned (people, projects, organizations, concepts, tools, technologies, etc.)
+    2. Relationships and connections between entities
+    3. Facts, statements, and assertions that should be remembered
+    4. Skills, capabilities, or expertise mentioned
+    5. Preferences, opinions, decisions, or recommendations
+    6. Action items, commitments, or future plans
+    7. Insights, patterns, or important conclusions
+    8. Context and metadata that enriches understanding
+    
+    Text to analyze:
+    {text_content}
+    
+    Additional metadata:
+    {metadata}
+    
+    Focus on extracting ANY information that would be valuable to remember for 
+    future reference, decision-making, or knowledge building. Adapt your analysis
+    to the type and style of text you're processing.
+  expected_output: >
+    A comprehensive list of identified entities, relationships, and observations 
+    extracted from the text, organized by category with clear descriptions 
+    and relevant context.
+
+structure_memories:
+  description: >
+    Take the extracted information from the text analysis and structure 
+    it into proper memory entities with observations. For each identified piece 
+    of information:
+    
+    1. Determine the appropriate entity type (person, project, organization, 
+       concept, skill, etc.)
+    2. Define clear entity names that are unique and descriptive
+    3. Categorize observations by type (fact, skill, preference, decision, etc.)
+    4. Add appropriate metadata including confidence levels and sources
+    5. Map relationships between entities with proper relationship types
+    6. Ensure consistency with existing memory structures
+    
+    Structure the memories in a format ready for storage in the memory system.
+  expected_output: >
+    Structured memory entities with properly formatted observations and 
+    relationships, including all necessary metadata and ready for storage 
+    via the memory tool.
+
+store_memories:
+  description: >
+    Use the memory tool to store all structured memories in the system. 
+    For each memory entity:
+    
+    1. Use the upsert_entity action to create or update entities
+       - This automatically handles checking if entity exists
+       - Updates existing entities with new observations
+       - Creates new entities if they don't exist
+    2. Store all identified relationships using create_relationship
+    3. Ensure proper hierarchy context (actor, synth_class, client levels)
+    4. Verify successful storage and handle any errors
+    
+    Example upsert: {"action": "upsert_entity", "params": {"name": "Policy Name", "entity_type": "policy", "observations": [...], "metadata": {...}}}
+    
+    Use the hierarchical memory tool to ensure memories are stored at the 
+    appropriate level based on the actor context.
+  expected_output: >
+    A detailed report of all memory operations performed, including:
+    - Entities created or updated
+    - Observations added
+    - Relationships stored
+    - Any errors encountered
+    - Summary of what was learned from the conversation

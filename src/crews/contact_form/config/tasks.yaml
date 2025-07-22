@@ -1,0 +1,205 @@
+# Contact Form Crew - Task Configuration
+# config/tasks.yaml
+
+analyze_inquiry:
+  description: >
+    Analyze this customer inquiry thoroughly:
+    
+    Contact Information:
+    - Name: {contact_name}
+    - Email: {contact_email}
+    - Company: {contact_company}
+    - Phone: {contact_phone}
+    
+    Message: {message}
+    
+    Metadata:
+    - Source: {source_site} ({source_locale})
+    - Timestamp: {timestamp}
+    - Referrer: {referrer}
+    
+    Use sequential thinking to:
+    1. Identify the primary intent (demo_request, pricing_inquiry, technical_question, partnership_inquiry, general_inquiry, support_request)
+    2. Assess urgency level based on language and context (low, medium, high, critical)
+    3. Extract key topics and technologies mentioned
+    4. Analyze sentiment (positive, neutral, negative)
+    5. Identify any mentioned products or services (N3xusIQ, multi-agent assistants, ERP integration, etc.)
+    6. Look for company size, budget, or timeline indicators
+    7. Recommend the appropriate response type and follow-up priority (1-10)
+    
+    Be thorough and extract all relevant business intelligence.
+  
+  expected_output: >
+    A comprehensive ContactAnalysis with all fields populated including:
+    - Primary intent classification
+    - Urgency level assessment
+    - List of key topics
+    - Sentiment analysis
+    - Mentioned products and technologies
+    - Business indicators (size, budget, timeline)
+    - Recommended response type and priority
+  
+  agent: inquiry_processing_specialist
+
+manage_contact:
+  description: >
+    Manage the contact information in our systems:
+    
+    1. Search memory for existing contact entity with email: {contact_email}
+    2. If found:
+       - Retrieve the entity and any previous interactions
+       - Count the number of previous observations
+       - Update metadata with new information if needed
+    3. If not found:
+       - Create new contact entity with type 'person'
+       - Include all contact information in metadata:
+         * name: {contact_name}
+         * email: {contact_email}
+         * company: {contact_company}
+         * phone: {contact_phone}
+         * source: contact_form
+         * first_contact_date: {timestamp}
+    
+    4. Create a relationship between the contact and client (ID: {client_id})
+       - Relationship type: "contacted_by"
+       - Include inquiry type in relationship metadata
+    
+    5. If Odoo tools are available:
+       - Search for existing contact in Odoo by email
+       - Create or update contact record with all information
+       - Create a new lead with:
+         * Name: "Inquiry from {contact_name} - {inquiry_type}"
+         * Contact: Link to contact record
+         * Description: Full inquiry message
+         * Priority: Based on urgency from analysis
+         * Tags: Based on topics and intent
+       - Return the Odoo record IDs and direct URLs
+    
+    Use the analysis results from the previous task to enrich the data.
+    
+    Return JSON with structure:
+    {{
+      "entity_id": "uuid",
+      "is_new": boolean,
+      "previous_interactions": number,
+      "relationships": ["relationship_ids"],
+      "odoo_contact_id": "id or null",
+      "odoo_lead_id": "id or null",
+      "odoo_url": "url or null",
+      "odoo_error": "error message or null"
+    }}
+  
+  expected_output: >
+    JSON object containing:
+    - Memory entity ID for the contact
+    - Whether this is a new or existing contact
+    - Count of previous interactions
+    - List of relationship IDs created
+    - Odoo contact and lead IDs (if available)
+    - Direct URL to Odoo records (if available)
+    - Any error messages from Odoo integration
+  
+  agent: contact_management_specialist
+  context:
+    - analyze_inquiry
+
+store_inquiry:
+  description: >
+    Store the inquiry details in memory for future reference:
+    
+    1. Create primary inquiry observation for the contact entity:
+       - Observation type: 'inquiry'
+       - Value structure:
+         * message: Full inquiry text
+         * inquiry_type: From analysis
+         * source: {source_site}
+         * locale: {source_locale}
+         * timestamp: {timestamp}
+         * referrer: {referrer}
+       - Tags: [inquiry_type, urgency_level, source_site]
+       - Confidence: 1.0
+    
+    2. Create additional observations for extracted intelligence:
+       - For each mentioned technology: observation type 'technology_interest'
+       - For each mentioned product: observation type 'product_interest'
+       - For company info: observation type 'company_info'
+       - For timeline: observation type 'timeline_indicator'
+       - For budget: observation type 'budget_indicator'
+    
+    3. If this is a follow-up (previous_interactions > 0):
+       - Note the pattern of inquiries
+       - Create observation type 'engagement_pattern'
+    
+    4. Apply smart tagging:
+       - Intent-based tags (demo_request, pricing_inquiry, etc.)
+       - Urgency tags (urgent, normal, low_priority)
+       - Topic tags from key topics list
+       - Source tags (website, locale)
+    
+    Return JSON with structure:
+    {{
+      "observation_ids": ["uuid1", "uuid2", ...],
+      "document_id": "uuid or null",
+      "tags": ["tag1", "tag2", ...]
+    }}
+  
+  expected_output: >
+    JSON object containing:
+    - List of all created observation IDs
+    - Document ID if inquiry was archived
+    - Complete list of tags applied for searchability
+  
+  agent: contact_management_specialist
+  context:
+    - analyze_inquiry
+    - manage_contact
+
+generate_response:
+  description: >
+    Based on all previous analysis and actions, generate the final response:
+    
+    1. Create a suggested email response that:
+       - Acknowledges their specific inquiry about {key_topics}
+       - Addresses their {primary_intent} appropriately
+       - Maintains {urgency_level} appropriate tone
+       - Thanks them for their interest in {mentioned_products}
+       - Includes relevant next steps based on intent
+       - Is personalized for {contact_name}
+       - Considers the locale {source_locale} for appropriate greetings/closings
+       - References their company {contact_company} if provided
+    
+    2. Define concrete next actions for the team:
+       - If urgency is high/critical: Immediate callback within 2 hours
+       - If demo_request: Schedule demo within 48 hours
+       - If pricing_inquiry: Send pricing deck and schedule call
+       - If technical_question: Route to technical team
+       - If partnership_inquiry: Route to partnerships team
+       - Include who should be notified (sales, support, partnerships)
+       - What materials to prepare (demo env, pricing, case studies)
+       - Specific follow-up timeline
+    
+    3. Include all reference IDs:
+       - Memory entity ID: {entity_id}
+       - Odoo lead ID: {odoo_lead_id}
+       - Observation IDs: {observation_ids}
+    
+    Return JSON with structure:
+    {{
+      "suggested_response": "Complete email text",
+      "next_actions": [
+        "Action 1 with timeline",
+        "Action 2 with owner",
+        ...
+      ]
+    }}
+  
+  expected_output: >
+    JSON object containing:
+    - Professional email response text ready to send
+    - List of specific, actionable next steps with timelines and owners
+  
+  agent: inquiry_processing_specialist
+  context:
+    - analyze_inquiry
+    - manage_contact
+    - store_inquiry

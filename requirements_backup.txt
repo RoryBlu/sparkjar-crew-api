@@ -1,0 +1,60 @@
+# Minimal requirements for crew-api service
+# Core CrewAI dependencies
+crewai>=0.141.0
+crewai-tools>=0.51.1
+
+# API Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.13.0
+
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# Vector Databases
+chromadb>=0.5.23
+
+# LLM and Embeddings
+openai>=1.13.3
+tiktoken>=0.5.2
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.4.2
+pyyaml>=6.0.0
+httpx>=0.25.0
+requests>=2.31.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.12.0
+
+# Google Drive Integration
+google-api-python-client>=2.100.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+
+# OCR and Image Processing
+paddlepaddle>=2.5.0
+paddleocr>=2.7.0
+Pillow>=10.0.0
+
+# Document Processing
+pdfplumber>=0.11.4
+pypdf>=3.17.0
+
+# Email
+sendgrid>=6.11.0
+
+# Chat Interface Dependencies
+redis>=5.0.0
+structlog>=24.1.0
+prometheus-client>=0.19.0
+cachetools>=5.3.0
