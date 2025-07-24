@@ -1,0 +1,239 @@
+# File-based Book Ingestion Tasks Configuration
+# Fixed to process files from list instead of requiring page numbers
+# IMPORTANT: All image viewing MUST use ImageViewerTool - agents cannot view images directly
+
+list_book_files:
+  description: |
+    List all image files in the Google Drive folder: {google_drive_folder_path}
+    Use client_user_id: {client_user_id} for credentials.
+    
+    IMPORTANT: Files use baron-style naming:
+    - baron001.png = page 1 (group 1, no suffix)
+    - baron001 1.png = page 2 (group 1, suffix 1) 
+    - baron001 24.png = page 25 (group 1, suffix 24)
+    - baron002.png = page 26 (group 2, no suffix)
+    - baron002 24.png = page 50 (group 2, suffix 24)
+    
+    Formula: page_number = (group - 1) * 25 + position
+    
+    Return a structured list with file IDs, names, and calculated page numbers.
+    Sort files by calculated page number (not alphabetically).
+  expected_output: |
+    A JSON array of files with:
+    - file_id: Google Drive file ID
+    - file_name: Original filename  
+    - calculated_page_number: Actual page number
+    - mime_type: Image MIME type
+    Example:
+    [
+      {"file_id": "abc123", "file_name": "baron001.png", "calculated_page_number": 1, "mime_type": "image/png"},
+      {"file_id": "def456", "file_name": "baron001 1.png", "calculated_page_number": 2, "mime_type": "image/png"}
+    ]
+  agent: file_manager
+
+process_book_page:
+  description: |
+    Process the image file {file_name} (file_id: {file_id}) from the book.
+    This is page {calculated_page_number} of the manuscript.
+    
+    1. Download the file from Google Drive using the file_id
+    2. Use the ImageViewerTool to perform OCR on the image
+    3. Return the transcribed text and confidence metrics
+    
+    Use the image_viewer tool with this EXACT prompt:
+    
+    "You are transcribing page {calculated_page_number} of a {language} manuscript.
+    
+    Book Context:
+    - Title: {book_title}
+    - Author: {book_author}
+    - Description: {book_description}
+    - Year: {book_year}
+    
+    This helps you correctly interpret:
+    - Dates and time periods mentioned in the text
+    - Place names and locations
+    - Character names and relationships
+    - Cultural or historical references
+    
+    Instructions:
+    1. Transcribe EXACTLY what you see on the page
+    2. Use the book context to correctly interpret ambiguous text
+    3. For unclear text:
+       - Mark with [?] if you can partially read it
+       - Mark as [illegible] if completely unreadable
+       - Note WHY it's unclear (faded, smudged, torn, etc.)
+    4. Track confidence levels:
+       - HIGH: Clear, unambiguous text (>90% certain)
+       - MEDIUM: Readable with some effort (70-90% certain)
+       - LOW: Significant uncertainty (<70% certain)
+    
+    Return a JSON response with this structure:
+    {
+      'transcription': 'The complete text of the page',
+      'unclear_sections': [
+        {
+          'text': 'the unclear [?] portion',
+          'position': 'line 5, words 3-4',
+          'confidence': 'LOW',
+          'reason': 'faded ink',
+          'context': 'surrounded by: before text ... after text'
+        }
+      ],
+      'overall_confidence': 0.85,
+      'metadata': {
+        'page_number': {calculated_page_number},
+        'file_name': '{file_name}',
+        'line_count': 25,
+        'word_count': 250,
+        'language_detected': '{language}',
+        'handwriting_style': 'cursive/print/mixed',
+        'ink_quality': 'good/faded/variable',
+        'page_condition': 'excellent/good/damaged'
+      }
+    }"
+    
+    Remember: You are using the image_viewer tool - you cannot see the image directly.
+    The tool will return the JSON response from GPT-4o's analysis.
+  expected_output: |
+    JSON containing:
+    - transcription: Complete page text with [?] markers
+    - unclear_sections: Detailed list of uncertainties  
+    - overall_confidence: Score between 0.0 and 1.0
+    - metadata: OCR process details including page number and filename
+  agent: vision_specialist
+  context: [list_book_files]
+
+refine_transcription:
+  description: |
+    Refine the OCR results for {file_name} using ImageViewerTool with enhanced context.
+    
+    Only execute this task if overall_confidence from initial pass is below {confidence_threshold}.
+    
+    Use the image_viewer tool with this enhanced prompt:
+    
+    "Please review and improve this transcription of manuscript page {calculated_page_number}.
+    
+    Previous transcription:
+    {initial_transcription}
+    
+    Specific unclear sections to focus on:
+    {unclear_sections}
+    
+    Additional context:
+    - Previous page ended with: '{previous_page_context}'
+    - This helps understand story flow and incomplete sentences
+    
+    For each unclear section:
+    1. Look at the specific area mentioned
+    2. Consider the narrative context
+    3. Analyze letter shapes and patterns
+    4. Think about common {language} words that fit
+    5. Consider the handwriting style consistency
+    
+    Improvement strategies:
+    - If a word starts at the end of the previous page, complete it
+    - Use story context to deduce character names or places
+    - Look for repeated words elsewhere on the page for comparison
+    - Consider common phrases in {language} literature
+    
+    Return updated JSON with your improvements and reasoning."
+    
+    The image_viewer tool will analyze the image again with this context.
+  expected_output: |
+    Refined JSON with:
+    - transcription: Improved text
+    - unclear_sections: Remaining uncertainties (should be fewer)
+    - overall_confidence: Updated score (should be higher)
+    - changes_made: List of specific improvements
+    - reasoning: Explanation for each change
+  agent: vision_specialist
+  context: [process_book_page]
+
+store_page_results:
+  description: |
+    Store the transcribed results for {file_name} to the database using the database_storage tool.
+    
+    Prepare the data for storage:
+    - book_key: Extract from '{google_drive_folder_path}' (last folder name) or use folder ID
+    - page_number: {calculated_page_number}
+    - file_name: {file_name}
+    - page_text: Final transcription from OCR process
+    - language_code: {language}
+    - version: 'original' (default)
+    - ocr_metadata: Include all OCR process data:
+      * initial_confidence
+      * final_confidence
+      * passes_used (1 or 2)
+      * unclear_sections_resolved
+      * processing_time
+      * handwriting_style
+      * page_condition
+    
+    The database_storage tool will:
+    1. Store the page in book_ingestions table
+    2. Generate overlapping text chunks (512 chars with 128 overlap)
+    3. Create embeddings for each chunk
+    4. Store embeddings in object_embeddings table
+    
+    Ensure all data is properly formatted before calling the tool.
+  expected_output: |
+    Storage confirmation with:
+    - page_id: UUID of the stored page
+    - embedding_count: Number of embeddings created
+    - success: true/false
+    - error: Any error message (null if successful)
+    Example:
+    {
+      "page_id": "123e4567-e89b-12d3-a456-426614174000",
+      "embedding_count": 5,
+      "success": true,
+      "error": null
+    }
+  agent: data_specialist
+  context: [process_book_page, refine_transcription]
+
+compile_book_results:
+  description: |
+    Compile the final results for the entire book processing job.
+    
+    Analyze all processed pages and create a comprehensive summary:
+    
+    1. Statistics:
+       - Total pages found in Google Drive
+       - Pages successfully processed
+       - Pages that failed (with reasons)
+       - Average confidence scores (initial vs final)
+       - Distribution of passes used (how many needed refinement)
+    
+    2. Quality Analysis:
+       - Most common types of uncertainties
+       - Pages with lowest confidence (may need manual review)
+       - Handwriting quality patterns
+       - Language consistency
+    
+    3. Performance Metrics:
+       - Total processing time
+       - Average time per page
+       - Database storage success rate
+    
+    4. Recommendations:
+       - Pages that may need manual review
+       - Suggestions for improving future runs
+       - Patterns identified that could help with similar books
+    
+    Create a clear, actionable report for the client.
+  expected_output: |
+    Comprehensive report with:
+    - book_key: Identifier for this book
+    - total_pages: Number of pages in Google Drive
+    - completed_pages: Successfully processed and stored
+    - failed_pages: List with page numbers and error reasons
+    - average_initial_confidence: Before refinement
+    - average_final_confidence: After all passes
+    - processing_time_minutes: Total time for the job
+    - pass_distribution: {"1_pass": 20, "2_pass": 5}
+    - recommendations: List of actionable suggestions
+    - pages_for_review: List of pages with confidence < 0.90
+  agent: project_manager
+  context: [store_page_results]

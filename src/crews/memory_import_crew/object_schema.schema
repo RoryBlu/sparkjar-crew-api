@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "MemoryImportCrewRequest",
+    "type": "object",
+    "description": "Schema for Memory Import Crew job requests",
+    "properties": {
+        "job_key": {"type": "string"},
+        "client_user_id": {"type": "string"},
+        "actor_type": {"type": "string", "enum": ["human", "synth"]},
+        "actor_id": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "memory_data": {"type": ["object", "array"]},
+        "import_config": {
+            "type": "object",
+            "properties": {
+                "batch_size": {"type": "integer", "minimum": 1, "default": 100},
+                "deduplicate": {"type": "boolean", "default": true},
+                "merge_strategy": {
+                    "type": "string",
+                    "enum": ["latest", "combine", "skip"],
+                    "default": "latest"
+                },
+                "validation_level": {
+                    "type": "string",
+                    "enum": ["strict", "moderate", "lenient"],
+                    "default": "strict"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": ["job_key", "client_user_id", "actor_type", "actor_id", "memory_data"],
+    "additionalProperties": true
+}

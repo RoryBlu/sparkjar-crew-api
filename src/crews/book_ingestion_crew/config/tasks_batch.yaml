@@ -1,0 +1,90 @@
+# Batch Processing Book Ingestion Tasks
+# Process ALL files in a single crew run with proper task chaining
+
+list_and_process_all_pages:
+  description: |
+    Process ALL book pages from Google Drive folder: {google_drive_folder_path}
+    Use client_user_id: {client_user_id} for credentials.
+    
+    1. List all image files from the folder
+    2. For EACH file found:
+       - Download the image using GoogleDriveTool
+       - Use ImageViewerTool to perform OCR with language: {language}
+       - Apply multi-pass OCR if confidence is below {confidence_threshold}
+    3. Return a comprehensive JSON with all pages transcribed
+    
+    IMPORTANT: Process ALL files, not just list them!
+    
+  expected_output: |
+    A comprehensive JSON object containing:
+    {
+      "book_title": "{book_title}",
+      "total_pages": <number>,
+      "pages": [
+        {
+          "page_number": 1,
+          "file_name": "baron001.png",
+          "transcription": "<full text content>",
+          "confidence": 0.95,
+          "language": "es"
+        },
+        ...
+      ]
+    }
+  agent: vision_specialist
+
+quality_review_and_refinement:
+  description: |
+    Review the OCR results from all pages and identify any that need refinement.
+    
+    For pages with confidence below {confidence_threshold}:
+    1. Use SJSequentialThinkingTool to analyze the context
+    2. Re-process unclear sections using ImageViewerTool with targeted prompts
+    3. Consider context from adjacent pages to improve accuracy
+    
+    Focus on improving Spanish handwriting recognition accuracy.
+    
+  expected_output: |
+    An updated JSON with refined transcriptions and improved confidence scores
+  agent: reasoning_specialist
+  context:
+    - list_and_process_all_pages
+
+store_all_results:
+  description: |
+    Store all transcribed pages to the database using SJMemoryTool.
+    
+    For each page:
+    1. Create an entity for the page with name: "{book_title}_page_<number>"
+    2. Store the transcription as an observation
+    3. Include metadata: page_number, confidence, file_name, processing_date
+    
+    Use client_user_id: {client_user_id} and book metadata:
+    - Title: {book_title}
+    - Author: {book_author}
+    - Year: {book_year}
+    
+  expected_output: |
+    Confirmation that all {total_pages} pages have been stored successfully
+    with entity IDs and storage timestamps
+  agent: data_specialist
+  context:
+    - quality_review_and_refinement
+
+final_summary:
+  description: |
+    Create a comprehensive summary of the book ingestion process.
+    
+    Include:
+    - Total pages processed
+    - Average confidence score
+    - Pages that required refinement
+    - Any issues encountered
+    - Storage confirmation
+    
+  expected_output: |
+    A final report in JSON format with complete statistics and confirmation
+    that all pages are stored in the database
+  agent: project_manager
+  context:
+    - store_all_results

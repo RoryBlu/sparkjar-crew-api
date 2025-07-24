@@ -1,0 +1,136 @@
+find_procedures_task:
+  description: >
+    Search for and analyze blog writing procedures from synth_class templates.
+    
+    Your mission is to find all relevant procedures for creating high-quality blog posts.
+    
+    Use these memory tool actions:
+    1. Start with: {"action": "search_templates", "params": {"query": "blog writing SOP"}}
+    2. Then try: {"action": "search_templates", "params": {"query": "blog procedures"}}
+    3. Look for checklists: {"action": "search_hierarchical", "params": {"query": "blog quality checklist", "include_synth_class": true}}
+    4. Find style guides: {"action": "search_templates", "params": {"query": "writing style guide"}}
+    
+    For each procedure found, identify:
+    - The procedure name and version
+    - All phases and their durations
+    - Specific steps within each phase
+    - Required deliverables
+    - Quality criteria
+    - Tools and resources mentioned
+    
+    Pay special attention to:
+    - SEO optimization requirements
+    - Word count guidelines
+    - Structure templates
+    - Quality scoring criteria
+    
+    Create a comprehensive summary that the blog writer can follow step-by-step.
+  expected_output: >
+    A structured document containing:
+    1. Main blog writing SOP with all phases
+    2. Quality checklist with scoring criteria
+    3. Any supplementary guidelines found
+    4. A quick reference summary of key requirements
+
+write_blog_task:
+  description: >
+    Write a comprehensive blog post about '{topic}' following the exact procedures found.
+    
+    You MUST follow the blog writing SOP phases:
+    
+    Phase 1: Research & Planning
+    - Conduct keyword research for the topic
+    - Analyze what would make this topic valuable
+    - Identify the target audience and their needs
+    - Plan the structure based on the procedure
+    
+    Phase 2: Content Structure
+    - Create a compelling headline using the formulas provided
+    - Develop the outline with proper H2/H3 structure
+    - Plan where to include examples and data
+    
+    Phase 3: Writing Process
+    - Write following the style guide requirements
+    - Maintain the specified tone and readability
+    - Include all required elements from the SOP
+    - Ensure 800-1500 word count as specified
+    
+    Phase 4: Optimization
+    - Apply all SEO requirements from the procedure
+    - Check all technical elements
+    - Ensure quality standards are met
+    
+    After writing, create a memory entity:
+    {"action": "create_entity", "params": {
+      "name": "[Your Blog Title]",
+      "entity_type": "content_output",
+      "metadata": {
+        "topic": "{topic}",
+        "word_count": [actual count],
+        "phases_completed": [1, 2, 3, 4],
+        "time_taken": "[estimated hours]",
+        "target_keywords": ["primary", "secondary"],
+        "synth_class": 24
+      }
+    }}
+  expected_output: >
+    A complete blog post including:
+    1. SEO-optimized title (50-60 characters)
+    2. Meta description (150-160 characters)
+    3. Full blog content (800-1500 words)
+    4. Proper H2/H3 structure
+    5. Confirmation of memory entity created
+
+quality_check_task:
+  description: >
+    Perform comprehensive quality assurance and create memory records.
+    
+    Step 1: Find the quality checklist
+    Use: {"action": "search_templates", "params": {"query": "blog quality checklist"}}
+    
+    Step 2: Assess the blog against each criterion
+    For each category in the checklist:
+    - Content Quality (weight: 0.4)
+    - Technical SEO (weight: 0.3) 
+    - User Experience (weight: 0.3)
+    
+    Score each item and calculate weighted totals.
+    
+    Step 3: Create memory records
+    
+    Add quality observations:
+    {"action": "add_observation", "params": {
+      "entity_name": "[Blog Title]",
+      "observation": "Quality scores - Content: X, SEO: Y, UX: Z, Overall: N",
+      "observation_type": "quality_assessment"
+    }}
+    
+    Add process insights:
+    {"action": "add_observation", "params": {
+      "entity_name": "[Blog Title]",
+      "observation": "[What worked well, what could improve]",
+      "observation_type": "process_insight"
+    }}
+    
+    Create procedure relationship:
+    {"action": "create_relationship", "params": {
+      "from_entity_name": "[Blog Title]",
+      "to_entity_name": "Blog Writing Standard Operating Procedure v3.0",
+      "relationship_type": "followed_procedure",
+      "metadata": {"compliance_rate": "[percentage]", "deviations": "[if any]"}
+    }}
+    
+    Step 4: Generate improvement recommendations
+    Based on the assessment, identify:
+    - What exceeded expectations
+    - What met standards
+    - What needs improvement
+    - Specific recommendations for next time
+  expected_output: >
+    A comprehensive quality report including:
+    1. Detailed scores for each quality category
+    2. Overall quality score and rating
+    3. Confirmation of memory observations added
+    4. Confirmation of relationship created
+    5. Top 3 recommendations for improvement
+    6. Certification statement if quality standards met

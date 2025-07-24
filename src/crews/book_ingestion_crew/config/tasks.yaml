@@ -1,0 +1,178 @@
+read:
+  description: |
+    Process the book ingestion request for job {job_id}.
+    
+    You have been provided with the following information:
+    - Google Drive folder path: {folder_path}
+    - Language for OCR processing: {language}
+    - Client user ID: {client_id}
+    
+    Your task is to acknowledge receipt of this book ingestion request and prepare 
+    for processing the documents in the specified Google Drive folder using OCR 
+    technology appropriate for the {language} language.
+    
+    Full request data: {inputs}
+  expected_output: |
+    A comprehensive acknowledgment message that includes:
+    1. Confirmation of the book ingestion request receipt
+    2. The Google Drive folder path to be processed
+    3. The language selected for OCR processing
+    4. The job ID and client ID for tracking
+    5. A summary of the next steps that would be taken for actual book processing
+  agent: reader
+
+create_job_file:
+  description: |
+    Create a job tracking file for this book ingestion job and upload it to Google Drive.
+    
+    Job Details:
+    - Job ID: {job_id}
+    - Client User ID: {client_id}
+    - Google Drive folder: {folder_path}
+    - Language: {language}
+    
+    You must:
+    1. Create a text file named: book_ingestion_crew_{job_id}.txt
+    2. Include job execution details in the file content:
+       - Job ID
+       - Crew type (book_ingestion_crew)
+       - Execution timestamp
+       - Client user ID
+       - Language setting
+       - Processing status
+    3. Upload the file to the Google Drive folder: {folder_path}
+    
+    Use the simple_file_upload tool with these parameters:
+    - file_name: book_ingestion_crew_{job_id}.txt
+    - content: A formatted job summary with all the details
+    - folder_path: {folder_path}
+    - client_user_id: {client_id}
+  expected_output: |
+    A confirmation that includes:
+    1. The exact file name created (book_ingestion_crew_{job_id}.txt)
+    2. Confirmation that the file was successfully uploaded to Google Drive
+    3. The Google Drive file ID for reference
+    4. A brief summary of what was included in the file
+  agent: file_creator
+
+list_images:
+  description: |
+    List all image files in the Google Drive folder: {folder_path}
+    
+    Use the google_drive_tool with these parameters:
+    - folder_path: {folder_path}
+    - client_user_id: {client_id}
+    - file_types: ["image/jpeg", "image/png", "image/jpg", "image/webp"]
+    - download: false
+    
+    Return a list of all image files found in the folder.
+  expected_output: |
+    A list of image files with their:
+    - File names
+    - File IDs
+    - File sizes
+    - Total count of images found
+  agent: manuscript_transcriber
+
+transcribe_images:
+  description: |
+    Download and transcribe ALL {language} manuscript images from the Google Drive folder.
+    
+    CRITICAL: You MUST use the image_viewer tool to transcribe REAL handwritten text.
+    DO NOT generate placeholder text. Each image contains actual Spanish handwritten manuscripts.
+    
+    Steps:
+    1. Use google_drive_tool to download ALL image files:
+       - folder_path: {folder_path}
+       - client_user_id: {client_id}
+       - file_types: ["image/jpeg", "image/png", "image/jpg"]
+       - download: true
+    
+    2. For EACH downloaded image file:
+       a. Use the image_viewer tool to transcribe the handwritten text:
+          - Pass the local_path from the download result
+          - The tool will return a JSON with transcription and word statistics
+       b. If needed, start a sequential thinking session for complex sections
+       c. Collect the transcription results from each image
+    
+    3. Compile results into final JSON format:
+       {{
+         "total_pages": <number of images>,
+         "transcriptions": {{
+           "IMG_5610.jpg": "<transcription from image_viewer tool>",
+           "IMG_5611.jpg": "<transcription from image_viewer tool>", 
+           "IMG_5612.jpg": "<transcription from image_viewer tool>"
+         }},
+         "stats": {{
+           "total_words": <sum of all pages>,
+           "normal_transcription": <sum of all pages>,
+           "context_logic_transcription": <sum of all pages>,
+           "unable_to_transcribe": <sum of all pages>
+         }},
+         "unclear_sections": ["combined list from all pages"],
+         "quality_summary": "overall assessment"
+       }}
+    
+    IMPORTANT: Use the image_viewer tool for EACH image to get real transcriptions.
+  expected_output: |
+    A JSON object containing the REAL transcribed text from each manuscript image.
+    Each transcription must be the ACTUAL handwritten text visible in that image,
+    not placeholder or example text. The JSON format:
+    {{
+      "total_pages": <actual number of images>,
+      "transcriptions": {{
+        "<image1_name>": "<ACTUAL transcribed text from image 1>",
+        "<image2_name>": "<ACTUAL transcribed text from image 2>",
+        "<image3_name>": "<ACTUAL transcribed text from image 3>"
+      }},
+      "unclear_sections": ["list of any illegible parts"],
+      "quality_summary": "overall transcription quality assessment"
+    }}
+  agent: manuscript_transcriber
+  context:
+    - list_images
+
+save_transcriptions:
+  description: |
+    Save the complete manuscript transcriptions to Google Drive.
+    
+    You will receive the transcription results from the previous task as a JSON object.
+    Parse this JSON and create a comprehensive text document with all the transcribed text.
+    
+    Use the simple_file_upload tool to create and upload a file named:
+    manuscript_transcriptions_{job_id}.txt
+    
+    Format the content as follows:
+    1. Header:
+       MANUSCRIPT TRANSCRIPTIONS
+       Job ID: {job_id}
+       Language: {language}
+       Total Pages: [from JSON total_pages]
+       Date: [current date]
+       ========================
+    
+    2. Transcriptions (from JSON transcriptions object):
+       For each page in the JSON transcriptions:
+       
+       --- Page X: [filename] ---
+       [Complete transcribed text for this page]
+       
+    3. Footer:
+       ========================
+       Quality Assessment: [from JSON quality_summary]
+       Unclear Sections: [from JSON unclear_sections if any]
+    
+    Tool parameters:
+    - file_name: manuscript_transcriptions_{job_id}.txt
+    - content: The complete formatted transcription document
+    - folder_path: {folder_path}
+    - client_user_id: {client_id}
+  expected_output: |
+    Confirmation that the transcription file was uploaded including:
+    - File name: manuscript_transcriptions_{job_id}.txt
+    - Google Drive file ID
+    - Confirmation of successful upload
+    - Number of pages saved
+  agent: file_creator
+  context:
+    - transcribe_images

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "job_key": "entity_research_crew",
+    "client_user_id": "587f8370-825f-4f0c-8846-2e6d70782989",
+    "actor_type": "synth",
+    "actor_id": "e30fc9f3-57da-4cf0-84e7-ea9188dd5fba",
+    "entity_research_crew": {
+      "entity_name": "Michael Williams",
+      "entity_domain": "entrepreneur",
+      "research_depth": "standard",
+      "focus_areas": ["technology ventures", "startup history", "professional network", "recent activities"]
+    }
+  }
+}

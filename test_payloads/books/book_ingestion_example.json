@@ -1,0 +1,20 @@
+{
+  "crew_name": "book_ingestion_crew",
+  "context": {
+    "google_drive_folder_path": "sparkjar/vervelyn/castor gonzalez/book 1/",
+    "client_user_id": "587f8370-825f-4f0c-8846-2e6d70782989",
+    "actor_type": "synth",
+    "actor_id": "b9af0667-5c92-4892-a7c5-947ed0cab0db",
+    "job_key": "book_ingestion_crew",
+    "language": "es",
+    "confidence_threshold": 0.85,
+    "max_retries": 2,
+    "output_format": "txt",
+    "book_metadata": {
+      "title": "Castor's Manuscript - Book 1",
+      "author": "Castor Gonzalez",
+      "year": 1998,
+      "description": "Handwritten Spanish manuscript written during 26 years of incarceration"
+    }
+  }
+}

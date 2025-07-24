@@ -1,0 +1,237 @@
+# Entity Research Crew - Task Configuration
+# config/tasks.yaml
+
+# Initial strategy and memory setup
+research_strategy_task:
+  description: >
+    Develop a comprehensive research strategy for investigating {entity_name} in the {entity_domain} domain.
+    
+    First, check organizational memory for any existing information about this entity.
+    Then use sequential thinking to break down the research approach into logical steps:
+    1. Define the scope and objectives of the research
+    2. Identify key information categories to investigate
+    3. Determine search strategies and keywords
+    4. Plan the research workflow
+    5. Set quality criteria for information validation
+    
+    Store the research strategy in memory for team reference.
+  expected_output: >
+    A detailed research strategy document including:
+    - Research objectives and scope
+    - Key information categories to investigate
+    - Search strategies and keyword lists
+    - Quality criteria for information validation
+    - Workflow plan for the research team
+  agent: lead_researcher
+
+# Comprehensive web research
+web_intelligence_task:
+  description: >
+    Conduct exhaustive web research on {entity_name} using advanced search techniques.
+    
+    Execute searches across multiple platforms:
+    1. General web searches with variations of the entity name
+    2. News articles and press releases
+    3. Social media profiles and mentions
+    4. Professional networking sites (LinkedIn, etc.)
+    5. Company databases and registries
+    6. Academic or research publications
+    7. Industry-specific databases
+    
+    For each finding:
+    - Verify the information across multiple sources
+    - Note the source credibility and date
+    - Extract key facts and store them in memory
+    - Identify URLs for deeper analysis
+    
+    Use at least 10 different search queries with variations.
+  expected_output: >
+    A comprehensive list of findings including:
+    - All discovered web presences and profiles
+    - Key facts and timeline of events
+    - List of URLs for document analysis
+    - Credibility assessment of sources
+    - Any conflicting information found
+  agent: web_intelligence_analyst
+  context:
+    - research_strategy_task
+
+# Document extraction and analysis
+document_analysis_task:
+  description: >
+    Analyze all documents and web pages identified during web research.
+    
+    For each document or webpage:
+    1. Extract the full content using appropriate scraping tools
+    2. Identify key information relevant to {entity_name}
+    3. Extract specific data points:
+       - Dates and timeline events
+       - Quoted statements
+       - Financial information
+       - Relationships and associations
+       - Contact information
+       - Achievements or notable events
+    4. Store all extracted information in memory with proper categorization
+    5. Create summaries of lengthy documents
+    
+    Pay special attention to:
+    - Official documents or reports
+    - Biographical information
+    - Professional history
+    - Published works or contributions
+  expected_output: >
+    A detailed analysis report containing:
+    - Summaries of all analyzed documents
+    - Extracted key facts organized by category
+    - Timeline of important events
+    - Notable quotes or statements
+    - List of verified facts vs. unverified claims
+  agent: document_analyst
+  context:
+    - web_intelligence_task
+
+# Network and relationship mapping
+relationship_mapping_task:
+  description: >
+    Map all relationships and connections for {entity_name}.
+    
+    Use sequential thinking to systematically identify:
+    1. Professional relationships (employers, colleagues, partners)
+    2. Organizational affiliations (boards, committees, associations)
+    3. Educational connections (schools, mentors, classmates)
+    4. Geographic connections (locations lived, worked, traveled)
+    5. Industry relationships (competitors, collaborators, clients)
+    6. Social or community connections
+    
+    For each relationship:
+    - Store in memory using the relationship structure
+    - Note the relationship type and strength
+    - Include time periods when applicable
+    - Document the source of this information
+    - Assess the significance of the connection
+    
+    Create a network map showing primary and secondary connections.
+  expected_output: >
+    A comprehensive relationship map including:
+    - Visual or structured representation of the network
+    - List of all identified relationships categorized by type
+    - Assessment of relationship strength and importance
+    - Timeline of relationship development
+    - Key influencers or connectors in the network
+  agent: relationship_mapper
+  context:
+    - document_analysis_task
+    - web_intelligence_task
+
+# Final report compilation
+compile_final_report_task:
+  description: >
+    Compile all research findings into a comprehensive executive report on {entity_name}.
+    
+    The report should be written in professional markdown format and include:
+    
+    1. Executive Summary
+       - Key findings at a glance
+       - Critical insights and recommendations
+    
+    2. Entity Overview
+       - Basic information and background
+       - Current status and activities
+    
+    3. Detailed Findings
+       - Professional history and achievements
+       - Education and qualifications
+       - Public presence and reputation
+       - Financial information (if applicable)
+       - Legal or regulatory information (if found)
+    
+    4. Network Analysis
+       - Key relationships and affiliations
+       - Influence and reach
+       - Strategic partnerships
+    
+    5. Timeline of Significant Events
+    
+    6. Online Presence Analysis
+       - Digital footprint summary
+       - Social media activity
+       - Published content
+    
+    7. Conclusions and Insights
+       - Pattern analysis
+       - Risk assessment (if applicable)
+       - Opportunities identified
+    
+    8. Appendices
+       - Source list with credibility ratings
+       - Methodology notes
+       - Areas for further investigation
+    
+    Format the report professionally with clear sections and proper markdown formatting.
+  expected_output: >
+    A professional, comprehensive research report in markdown format that provides
+    actionable intelligence about the entity, saved as a document and stored in memory
+  agent: report_compiler
+  context:
+    - research_strategy_task
+    - web_intelligence_task
+    - document_analysis_task
+    - relationship_mapping_task
+  output_file: "entity_research_report_{entity_name}.md"
+
+# Send notification email
+send_report_notification_task:
+  description: >
+    Send an email notification that the research report for {entity_name} has been completed.
+    
+    The email should:
+    1. Include a brief executive summary of key findings
+    2. Attach or link to the full report
+    3. Highlight any critical or time-sensitive findings
+    4. Suggest next steps or areas for further investigation
+    5. Thank the recipient for their patience
+    
+    Use a professional tone and ensure the email is well-formatted.
+    Send to: {recipient_email}
+  expected_output: >
+    Confirmation that the email has been sent successfully with the report summary
+  agent: report_compiler
+  context:
+    - compile_final_report_task
+
+# Archive report and update memory
+archive_report_task:
+  description: >
+    Archive the completed research report and ensure it's properly stored and accessible.
+    
+    Perform the following steps:
+    1. Take the markdown report from the previous task and convert it to PDF using the document service
+    2. Save the PDF to the document service with appropriate metadata:
+       - Title: "Entity Research Report - {entity_name}"
+       - Category: "Research Reports"
+       - Tags: ["entity-research", "{entity_domain}", "{entity_name}"]
+    3. Create a memory entity for the report document with:
+       - Entity type: "document"
+       - Name: "Research Report - {entity_name}"
+       - Metadata including document_id, creation_date, and access_link
+    4. Create a relationship between the report entity and {entity_name} entity:
+       - Relationship type: "research_report_for"
+    5. Send an email notification to {recipient_email} containing:
+       - Subject: "Research Report Ready: {entity_name}"
+       - Executive summary of key findings (first section of report)
+       - Direct link to access the PDF document
+       - List of key insights discovered
+       - Suggested next steps
+    6. Return the document ID and public access link
+    
+    Ensure all operations complete successfully before proceeding.
+  expected_output: >
+    Confirmation containing:
+    - Document ID from the document service
+    - Public access link to the PDF report
+    - Memory entity ID for the report
+    - Confirmation that email was sent successfully
+    - Summary of all archival actions taken
+  agent: document_archivist
+  context:
+    - compile_final_report_task
