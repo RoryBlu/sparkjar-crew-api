@@ -6,7 +6,11 @@ access their synth_class templates and optionally client-level knowledge.
 """
 import json
 import logging
+<<<<<<< HEAD
 from typing import Dict, Any, List, Optional, Union, Type, Tuple
+=======
+from typing import Dict, Any, List, Optional, Union, Type
+>>>>>>> b20d3e50d2dfe58888dda5ee1a554efd511defba
 from uuid import UUID
 import httpx
 from crewai.tools import BaseTool
@@ -74,7 +78,10 @@ class SJMemoryToolHierarchical(BaseTool):
     - add_observation: Add observation to entity
     - create_relationship: Link entities
     - get_entity: Get entity details
+<<<<<<< HEAD
     - upsert_entity: Create or update entity (NEW)
+=======
+>>>>>>> b20d3e50d2dfe58888dda5ee1a554efd511defba
     
     Examples:
     - Search with hierarchy: {"action": "search_entities", "params": {"query": "blog procedures", "include_hierarchy": true}}
@@ -94,7 +101,10 @@ class SJMemoryToolHierarchical(BaseTool):
     - search_entities: {"action": "search_entities", "params": {"query": "procedures", "include_hierarchy": true}}
     - search_hierarchical: {"action": "search_hierarchical", "params": {"query": "blog SOP", "include_synth_class": true, "include_client": false}}
     - search_templates: {"action": "search_templates", "params": {"query": "writing guidelines"}}
+<<<<<<< HEAD
     - upsert_entity: {"action": "upsert_entity", "params": {"name": "policy_name", "entity_type": "policy", "observations": [{"observation": "content", "observation_type": "type"}], "metadata": {}}}
+=======
+>>>>>>> b20d3e50d2dfe58888dda5ee1a554efd511defba
     """
     args_schema: Type[BaseModel] = HierarchicalMemoryToolInput
     
@@ -230,7 +240,11 @@ class SJMemoryToolHierarchical(BaseTool):
                 return f"Error: Invalid JSON. Expected format: {{\"action\": \"search_entities\", \"params\": {{...}}}}"
             
             if not action:
+<<<<<<< HEAD
                 return f"Error: Missing 'action' field. Available: search_entities, search_hierarchical, search_templates, access_cross_context, create_entity, add_observation, create_relationship, get_entity, upsert_entity"
+=======
+                return f"Error: Missing 'action' field. Available: search_entities, search_hierarchical, search_templates, access_cross_context, create_entity, add_observation, create_relationship, get_entity"
+>>>>>>> b20d3e50d2dfe58888dda5ee1a554efd511defba
             
             # Map actions to methods (including new hierarchical actions)
             actions = {
@@ -244,8 +258,11 @@ class SJMemoryToolHierarchical(BaseTool):
                 "add_observation": self._add_observation,
                 "create_relationship": self._create_relationship,
                 "get_entity": self._get_entity,
+<<<<<<< HEAD
                 # New upsert action
                 "upsert_entity": self._upsert_entity,
+=======
+>>>>>>> b20d3e50d2dfe58888dda5ee1a554efd511defba
             }
             
             if action not in actions:
@@ -705,6 +722,7 @@ class SJMemoryToolHierarchical(BaseTool):
                 "success": False,
                 "error": str(e)
             }
+<<<<<<< HEAD
     
     async def _upsert_entity(self,
                             name: str,
@@ -1017,6 +1035,8 @@ class SJMemoryToolHierarchical(BaseTool):
         
         # Only update if we couldn't match keys - more conservative approach
         return False
+=======
+>>>>>>> b20d3e50d2dfe58888dda5ee1a554efd511defba
 
 # Convenience function to create a hierarchical memory tool for a specific actor
 def create_hierarchical_memory_tool(
