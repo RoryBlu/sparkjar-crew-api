@@ -1,0 +1,74 @@
+# SparkJAR Crew API Requirements for Railway
+# Based on CrewAI 0.148.0 and actual codebase usage
+
+# Install sparkjar packages from GitHub
+sparkjar-shared @ git+https://github.com/YOUR_ORG/sparkjar-shared.git@v0.1.0
+sparkjar-crews @ git+https://github.com/YOUR_ORG/sparkjar-crews.git@v0.1.0
+
+# Core CrewAI - MUST BE LATEST
+crewai==0.148.0
+crewai-tools>=0.51.1
+
+# API Framework - Compatible versions
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+python-multipart>=0.0.6
+
+# Database - Compatible with CrewAI
+sqlalchemy==2.0.41
+psycopg2-binary==2.9.10
+asyncpg>=0.30.0
+pgvector==0.4.1
+alembic>=1.13.0
+
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+pyjwt>=2.9.0
+
+# Vector Databases - Compatible with CrewAI 0.148.0
+chromadb==1.0.15
+
+# LLM and Embeddings - Compatible versions
+openai>=1.13.3
+tiktoken>=0.5.2
+
+# Utilities - Compatible with CrewAI
+python-dotenv>=1.0.0
+pydantic==2.11.7
+pyyaml>=6.0.0
+httpx>=0.25.0
+requests>=2.31.0
+cachetools>=5.3.0
+
+# Google Drive Integration - Compatible versions
+google-api-python-client==2.176.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+
+# Document Processing
+pypdf>=3.17.0
+python-docx>=1.0.0
+beautifulsoup4>=4.12.0
+fpdf2>=2.7.0
+pdf2image>=1.16.0
+pytesseract>=0.3.10
+ocrmypdf>=15.0.0
+lxml>=4.9.0
+html2text>=2020.1.16
+chardet>=5.2.0
+Pillow>=10.1.0
+
+# Redis for session management
+redis>=5.0.0
+
+# Additional monitoring
+sentry-sdk[fastapi]>=1.38.0
+
+# Memory Service Client
+numpy>=1.24.0
+
+# Testing (optional for dev)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+httpx[http2]>=0.25.0

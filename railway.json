@@ -1,0 +1,97 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pip install -r requirements-railway.txt"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "startCommand": "uvicorn src.api.main:app --host 0.0.0.0 --port ${PORT:-8000}",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 30,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  },
+  "variables": {
+    "PORT": {
+      "default": "8000",
+      "description": "Port for the crew API service"
+    },
+    "DATABASE_URL": {
+      "required": true,
+      "description": "PostgreSQL connection string"
+    },
+    "DATABASE_URL_DIRECT": {
+      "required": true,
+      "description": "Direct PostgreSQL connection (non-pooled)"
+    },
+    "DATABASE_URL_POOLED": {
+      "required": true,
+      "description": "Pooled PostgreSQL connection"
+    },
+    "API_SECRET_KEY": {
+      "required": true,
+      "description": "Secret key for JWT authentication"
+    },
+    "OPENAI_API_KEY": {
+      "required": true,
+      "description": "OpenAI API key for LLM operations"
+    },
+    "REDIS_URL": {
+      "required": true,
+      "description": "Redis connection URL for session management"
+    },
+    "CHROMA_URL": {
+      "required": true,
+      "description": "ChromaDB server URL"
+    },
+    "CHROMA_SERVER_AUTHN_CREDENTIALS": {
+      "required": true,
+      "description": "ChromaDB authentication token"
+    },
+    "MEMORY_INTERNAL_API_URL": {
+      "default": "http://memory-internal.railway.internal:8001",
+      "description": "Internal memory service URL"
+    },
+    "MCP_REGISTRY_URL": {
+      "required": true,
+      "description": "MCP Registry service URL"
+    },
+    "MCP_REGISTRY_AUTH_TOKEN": {
+      "required": true,
+      "description": "MCP Registry authentication token"
+    },
+    "EMBEDDING_PROVIDER": {
+      "default": "openai",
+      "description": "Embedding provider (openai or custom)"
+    },
+    "EMBEDDINGS_API_URL": {
+      "required": false,
+      "description": "Custom embeddings service URL"
+    },
+    "ENVIRONMENT": {
+      "default": "production",
+      "description": "Environment (development/staging/production)"
+    },
+    "LOG_LEVEL": {
+      "default": "INFO",
+      "description": "Logging level"
+    },
+    "PYTHONPATH": {
+      "default": "/app",
+      "description": "Python path for imports"
+    },
+    "CHAT_SESSION_TTL_HOURS": {
+      "default": "24",
+      "description": "Chat session TTL in hours"
+    },
+    "CHAT_RATE_LIMIT_PER_MINUTE": {
+      "default": "20",
+      "description": "Chat rate limit per minute"
+    },
+    "CHAT_RATE_LIMIT_PER_HOUR": {
+      "default": "200",
+      "description": "Chat rate limit per hour"
+    }
+  }
+}

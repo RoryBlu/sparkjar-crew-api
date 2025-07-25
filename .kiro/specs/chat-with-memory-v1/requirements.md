@@ -4,6 +4,17 @@
 
 The Chat with Memory v1 feature is a comprehensive chat service that integrates deeply with the SparkJAR Memory Service to provide intelligent, context-aware conversations. The system leverages the 4-realm hierarchical memory architecture (CLIENT, SYNTH, SYNTH_CLASS, SKILL_MODULE) to deliver personalized interactions through two distinct modes: Tutor Mode for active learning experiences and Agent Mode for passive assistance. This chat service acts as the primary interface for users to interact with synths that have access to organizational knowledge, role-based procedures, tool expertise, and personal learning history.
 
+## Overview
+
+The Chat with Memory v1 system extends the existing chat infrastructure with enhanced capabilities:
+
+1. **Deep Memory Integration**: Full utilization of the 4-realm memory hierarchy with proper precedence (CLIENT > SYNTH > SYNTH_CLASS > SKILL_MODULE)
+2. **Dual Mode Operation**: Two distinct interaction modes - proactive Tutor Mode and passive Agent Mode
+3. **Real-time Streaming**: Support for both standard and streaming responses with typing indicators
+4. **Session Persistence**: Conversation history stored as memory entities with relationships
+5. **Learning Loop**: Automatic extraction and storage of successful patterns for continuous improvement
+6. **Knowledge Graph Navigation**: Ability to traverse entity relationships for comprehensive responses
+
 ## Requirements
 
 ### Requirement 1
@@ -125,3 +136,27 @@ The Chat with Memory v1 feature is a comprehensive chat service that integrates 
 3. WHEN procedures or SOPs are referenced THEN the system SHALL present step-by-step information in clear, actionable formats
 4. WHEN code or technical content is discussed THEN the system SHALL provide properly formatted code blocks and syntax highlighting
 5. WHEN users request summaries THEN the system SHALL generate concise overviews while maintaining access to detailed information
+
+### Requirement 11
+
+**User Story:** As a system administrator, I want to monitor chat performance and memory utilization, so that I can ensure optimal system operation and user experience.
+
+#### Acceptance Criteria
+
+1. WHEN chat interactions occur THEN the system SHALL track response times, memory query counts, and token usage
+2. WHEN performance degrades THEN the system SHALL log detailed metrics for troubleshooting
+3. WHEN memory queries are performed THEN the system SHALL track which realms and entities were accessed
+4. WHEN errors occur THEN the system SHALL log correlation IDs and context for debugging
+5. WHEN system load is high THEN the system SHALL provide health check endpoints and metrics for monitoring
+
+### Requirement 12
+
+**User Story:** As a developer, I want clear integration points with the existing chat infrastructure, so that I can extend the system while maintaining compatibility.
+
+#### Acceptance Criteria
+
+1. WHEN implementing the new features THEN the system SHALL extend existing ChatRequest and ChatResponse models
+2. WHEN adding mode switching THEN the system SHALL add a "mode" field to the request model
+3. WHEN storing conversation data THEN the system SHALL use the existing memory service API endpoints
+4. WHEN implementing real-time features THEN the system SHALL use the existing streaming infrastructure
+5. WHEN handling authentication THEN the system SHALL maintain compatibility with existing JWT tokens and scopes
