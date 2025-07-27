@@ -4,7 +4,7 @@
 
 # Core CrewAI - MUST BE LATEST
 crewai==0.148.0
-crewai-tools>=0.51.1
+# crewai-tools>=0.51.1  # Temporarily disabled for testing
 
 # API Framework - Compatible versions
 fastapi==0.116.1
@@ -24,7 +24,8 @@ passlib[bcrypt]>=1.7.4
 pyjwt>=2.9.0
 
 # Vector Databases - Compatible with CrewAI 0.148.0
-chromadb==1.0.15
+# Let CrewAI manage chromadb version
+# chromadb==1.0.15
 
 # LLM and Embeddings - Compatible versions
 openai>=1.13.3
@@ -68,3 +69,6 @@ playwright>=1.49.1
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
 pytest-mock>=3.12.0
+
+# Shared SparkJAR Package
+git+https://github.com/RoryBlu/sparkjar-shared.git@main#egg=sparkjar-shared

@@ -47,6 +47,7 @@ except ImportError:
 
 class BookIngestions(Base):
     __tablename__ = "book_ingestions"
+    __table_args__ = {"schema": "vervelyn"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, server_default=text('gen_random_uuid()'))
     book_key = Column(Text, nullable=False)

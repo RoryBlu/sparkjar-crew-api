@@ -11,12 +11,14 @@ from .base import BaseCrewHandler
 from .gen_crew.gen_crew_handler import GenCrewHandler
 from .book_ingestion_crew import BookIngestionCrewHandler
 from .memory_maker_crew import MemoryMakerCrewHandler
+from .book_translation_crew import BookTranslationCrewHandler
 
 # Registry of available crew handlers
 CREW_REGISTRY: Dict[str, Any] = {
     "gen_crew": GenCrewHandler,
     "book_ingestion_crew": BookIngestionCrewHandler,
     "memory_maker_crew": MemoryMakerCrewHandler,
+    "book_translation_crew": BookTranslationCrewHandler,
 }
 
 __all__ = ["CREW_REGISTRY", "BaseCrewHandler"]

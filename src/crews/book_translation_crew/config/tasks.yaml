@@ -1,0 +1,81 @@
+query_pages:
+  description: |
+    Query all original pages from the database for the book.
+    
+    Use the simple_db_query tool with these exact parameters:
+    {
+      "client_user_id": "{client_user_id}",
+      "book_key": "{book_key}",
+      "version": "original"
+    }
+    
+    This will return all pages that need to be translated.
+  expected_output: |
+    A list of all pages with their page numbers and text content.
+    The output should confirm how many pages were found.
+  agent: "translation_agent"
+
+translate_pages:
+  description: |
+    Translate EACH page from Spanish to {target_language}.
+    
+    CRITICAL INSTRUCTIONS:
+    1. Take the pages from the query_pages task output
+    2. For EACH page, translate the ENTIRE page_text field
+    3. NEVER summarize - translate EVERY word and sentence
+    4. The translation should be approximately the same length as the original
+    5. Process in batches of 10 pages at a time for efficiency
+    
+    Example: If a page has 500 words in Spanish, the translation should have roughly 450-550 words in {target_language}.
+    
+    DO NOT create summaries, abstracts, or shortened versions.
+    TRANSLATE COMPLETELY, maintaining all details, examples, and context.
+  expected_output: |
+    A list of complete translations where each translation:
+    - Contains the page_number
+    - Contains the full translated text (same length as original)
+    - Is marked clearly with "Page X:" prefix
+    - Has NO summaries or shortened content
+  agent: "translation_agent"
+
+store_translations:
+  description: |
+    Store each translated page back to the database.
+    
+    For EACH translated page from the previous task:
+    1. Extract the page_number and translated text
+    2. Use the simple_db_storage tool with this exact JSON format:
+    {{
+      "client_user_id": "{client_user_id}",
+      "book_key": "{book_key}",
+      "page_number": [actual page number],
+      "page_text": "[complete translated text]",
+      "file_name": "page_[number]_translated.txt",
+      "version": "translation_{target_language}",
+      "language_code": "{target_language}"
+    }}
+    
+    IMPORTANT: Store the COMPLETE translated text, not a summary.
+    Process each page individually. Continue even if some fail.
+  expected_output: |
+    A report showing:
+    - Total pages attempted to store
+    - Number successfully stored
+    - List of page numbers that failed (if any)
+    - Confirmation that translations are in the database
+  agent: "translation_agent"
+
+report_results:
+  description: |
+    Generate a final report of the translation process.
+    
+    Include:
+    - Total pages found in original book
+    - Total pages successfully translated
+    - Total pages successfully stored
+    - List of any failed pages
+    - Overall success rate
+  expected_output: |
+    A comprehensive summary report with all statistics and 
+    confirmation that the book translation is complete.
+  agent: "translation_agent"

@@ -1,8 +1,8 @@
 """Crew API configuration.
 Extends the shared configuration settings with service-specific validation."""
 
-from shared.config.shared_settings import *  # noqa: F401,F403
-from shared.config.config_validator import validate_config_on_startup
+from sparkjar_shared.config.shared_settings import *  # noqa: F401,F403
+from sparkjar_shared.config.config_validator import validate_config_on_startup
 import logging
 import os
 

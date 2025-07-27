@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Book Translation Crew Input Schema",
+  "type": "object",
+  "description": "Input parameters for translating previously ingested books",
+  "properties": {
+    "client_user_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "User within the client organization"
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": ["client", "synth_class", "skill_module", "synth"],
+      "description": "Actor type: client, synth_class, skill_module, or synth"
+    },
+    "actor_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Must exist in actors table"
+    },
+    "book_key": {
+      "type": "string",
+      "description": "Book identifier from ingestion (Google Drive path)",
+      "examples": [
+        "https://drive.google.com/drive/u/0/folders/1HFDpMUHT0wjVWdWB9XIUMYavmq23I4JO"
+      ]
+    },
+    "target_language": {
+      "type": "string",
+      "enum": ["en", "es", "fr", "de", "it", "pt", "zh", "ja", "ko"],
+      "default": "en",
+      "description": "Target language code for translation"
+    }
+  },
+  "required": ["client_user_id", "actor_type", "actor_id", "book_key"],
+  "additionalProperties": false
+}
