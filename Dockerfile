@@ -7,23 +7,21 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy shared modules first (when building from monorepo root)
-COPY shared/ /app/shared/
+# Copy requirements and install
+COPY requirements-railway.txt .
+RUN pip install --no-cache-dir -r requirements-railway.txt
 
-# Copy service-specific requirements and install
-COPY services/crew-api/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy service code
-COPY services/crew-api/src/ /app/src/
-COPY services/crew-api/main.py .
+# Copy application code
+COPY src/ /app/src/
+COPY main.py .
 
 # Create directories for generated crews
 RUN mkdir -p src/crews/generated
 
-# Set Python path to include shared modules
+# Set Python path
 ENV PYTHONPATH=/app:$PYTHONPATH
 ENV PYTHONUNBUFFERED=1
 
@@ -31,7 +29,7 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 8000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import httpx; httpx.get('http://localhost:8000/health')" || exit 1
 
 # Start the application
