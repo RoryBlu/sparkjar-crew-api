@@ -2,9 +2,7 @@
 # Based on CrewAI 0.148.0 and actual codebase usage
 
 # Install sparkjar packages from GitHub
-# sparkjar-shared @ git+https://github.com/YOUR_ORG/sparkjar-shared.git@v0.1.0
-# sparkjar-crews @ git+https://github.com/YOUR_ORG/sparkjar-crews.git@v0.1.0
-# TODO: Uncomment above lines after creating the repos
+sparkjar-shared @ git+https://github.com/RoryBlu/sparkjar-shared.git@main
 
 # Core CrewAI - MUST BE LATEST
 crewai==0.148.0
