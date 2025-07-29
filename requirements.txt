@@ -2,8 +2,8 @@
 # Based on CrewAI 0.148.0 and actual codebase usage
 # ChromaDB is included as a dependency of CrewAI (client mode)
 
-# Core CrewAI - MUST BE LATEST
-crewai==0.148.0
+# Core CrewAI - Using older version for macOS 10.15 compatibility
+crewai==0.65.2
 # crewai-tools>=0.51.1  # Temporarily disabled for testing
 
 # API Framework - Compatible versions
@@ -13,7 +13,7 @@ python-multipart>=0.0.6
 
 # Database - Compatible with CrewAI
 sqlalchemy==2.0.41
-psycopg2-binary==2.9.10
+psycopg2-binary>=2.9.9
 asyncpg>=0.30.0
 pgvector==0.4.1
 alembic>=1.13.0

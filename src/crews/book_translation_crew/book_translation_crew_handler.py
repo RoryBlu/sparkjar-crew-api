@@ -7,7 +7,7 @@ import logging
 from typing import Dict, Any
 from uuid import UUID
 
-from crews.base import BaseCrewHandler
+from src.crews.base import BaseCrewHandler
 from src.services.json_validator import validate_crew_request, SchemaValidationError
 from .main import kickoff
 

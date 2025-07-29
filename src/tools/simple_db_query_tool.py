@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select, text
 from datetime import datetime
 
-from database.models import ClientUsers, ClientSecrets
+from src.database.models import ClientUsers, ClientSecrets
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class SimpleDBQueryTool(BaseTool):
     async def _query_pages(self, params: dict) -> list:
         """Query pages from client database."""
         # Get client database URL
-        from database.connection import get_db_session
+        from src.database.connection import get_db_session
         
         async with get_db_session() as session:
             # Get user's client_id

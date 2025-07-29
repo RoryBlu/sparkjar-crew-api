@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select
 from datetime import datetime
 
-from database.models import ClientUsers, ClientSecrets, BookIngestions
+from src.database.models import ClientUsers, ClientSecrets, BookIngestions
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class SimpleDBStorageTool(BaseTool):
     async def _store_page(self, params: dict) -> dict:
         """Store page in database."""
         # Get client database URL
-        from database.connection import get_db_session
+        from src.database.connection import get_db_session
         
         async with get_db_session() as session:
             # Get user's client_id
