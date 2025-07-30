@@ -12,13 +12,13 @@ from fastapi import Depends, HTTPException, status, Response
 from fastapi.responses import StreamingResponse
 import httpx
 
-from src.chatmodels.chat_models import ChatRequest, ChatResponse
-from src.chatmodels.context_models import SynthContext
-from src.chatservices.conversation_manager import ConversationManager
-from src.chatservices.session_manager import SessionManager, SessionContextStore
-from src.chatclients.memory_service import MemoryServiceClient
-from src.chatclients.thinking_service import ThinkingServiceClient
-from src.chatconfig import get_settings
+from src.chat.models.chat_models import ChatRequest, ChatResponse
+from src.chat.models.context_models import SynthContext
+from src.chat.services.conversation_manager import ConversationManager
+from src.chat.services.session_manager import SessionManager, SessionContextStore
+from src.chat.clients.memory_service import MemoryServiceClient
+from src.chat.clients.thinking_service import ThinkingServiceClient
+from src.chat.config import get_settings
 from .auth_enhanced import TokenData, verify_chat_access_enhanced
 
 logger = logging.getLogger(__name__)
