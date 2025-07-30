@@ -498,12 +498,149 @@ async def delete_session(
     """
     return await chat_controller.delete_session(session_id, token_data)
 
+# Admin endpoints for feature flag management
+@app.get("/admin/feature-flags")
+async def get_feature_flags(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Get all feature flags and their current states
+    
+    Returns:
+        Dictionary of all feature flags with their configurations
+    """
+    try:
+        # Verify token
+        payload = verify_token(credentials.credentials)
+        
+        # Check for admin scope
+        scopes = payload.get("scopes", [])
+        if "admin" not in scopes and "sparkjar_internal" not in scopes:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin access required to view feature flags"
+            )
+        
+        from services.feature_flags import get_feature_flags
+        feature_flags = get_feature_flags()
+        
+        return {
+            "flags": feature_flags.get_all_flags(),
+            "metrics": feature_flags.get_metrics()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting feature flags: {e}")
+        raise HTTPException(status_code=401, detail=str(e))
+
+@app.post("/admin/feature-flags")
+async def update_feature_flag(
+    flag_name: str = Field(..., description="Name of the feature flag"),
+    enabled: bool = Field(..., description="Whether to enable or disable the flag"),
+    description: Optional[str] = Field(None, description="Optional description"),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Update a feature flag
+    
+    Args:
+        flag_name: Name of the feature flag to update
+        enabled: Whether to enable or disable the flag
+        description: Optional description for the flag
+        
+    Returns:
+        Updated flag configuration
+    """
+    try:
+        # Verify token
+        payload = verify_token(credentials.credentials)
+        
+        # Check for admin scope
+        scopes = payload.get("scopes", [])
+        if "admin" not in scopes and "sparkjar_internal" not in scopes:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin access required to update feature flags"
+            )
+        
+        from services.feature_flags import get_feature_flags
+        feature_flags = get_feature_flags()
+        
+        # Update the flag
+        feature_flags.set_flag(flag_name, enabled, description)
+        
+        # Log the change
+        logger.info(
+            f"Feature flag '{flag_name}' updated to {enabled} by user {payload.get('sub')}",
+            extra={
+                "flag_name": flag_name,
+                "enabled": enabled,
+                "updated_by": payload.get("sub")
+            }
+        )
+        
+        # Return updated flag
+        flag_config = feature_flags.get_flag(flag_name)
+        return {
+            "flag_name": flag_name,
+            "enabled": flag_config.enabled,
+            "description": flag_config.description,
+            "updated_at": flag_config.updated_at.isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error updating feature flag: {e}")
+        raise HTTPException(status_code=401, detail=str(e))
+
+@app.post("/admin/feature-flags/reset-metrics")
+async def reset_feature_flag_metrics(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """
+    Reset feature flag usage metrics
+    
+    Returns:
+        Success message
+    """
+    try:
+        # Verify token
+        payload = verify_token(credentials.credentials)
+        
+        # Check for admin scope
+        scopes = payload.get("scopes", [])
+        if "admin" not in scopes and "sparkjar_internal" not in scopes:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin access required to reset metrics"
+            )
+        
+        from services.feature_flags import get_feature_flags
+        feature_flags = get_feature_flags()
+        
+        # Reset metrics
+        feature_flags.reset_metrics()
+        
+        logger.info(f"Feature flag metrics reset by user {payload.get('sub')}")
+        
+        return {"message": "Feature flag metrics reset successfully"}
+        
+    except Exception as e:
+        logger.error(f"Error resetting metrics: {e}")
+        raise HTTPException(status_code=401, detail=str(e))
+
 # Startup and shutdown events
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup."""
     await chat_controller.initialize()
     logger.info("Chat controller initialized")
+    
+    # Log feature flag status
+    from services.feature_flags import get_feature_flags
+    feature_flags = get_feature_flags()
+    all_flags = feature_flags.get_all_flags()
+    enabled_count = sum(1 for f in all_flags.values() if f["enabled"])
+    logger.info(f"Feature flags initialized: {enabled_count}/{len(all_flags)} enabled")
 
 @app.on_event("shutdown")
 async def shutdown_event():

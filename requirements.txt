@@ -38,6 +38,7 @@ pyyaml>=6.0.0
 httpx>=0.25.0
 requests>=2.31.0
 cachetools>=5.3.0
+tenacity>=8.2.0
 
 # Google Drive Integration - Compatible versions
 google-api-python-client==2.176.0

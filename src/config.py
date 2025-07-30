@@ -11,6 +11,7 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 MEMORY_SERVICE_URL = os.getenv("MEMORY_SERVICE_URL", "http://localhost:8003")
 THINKING_SERVICE_URL = os.getenv("THINKING_SERVICE_URL", "http://localhost:8004")
 CREW_API_URL = os.getenv("CREW_API_URL", "http://localhost:8000")
+CREWS_SERVICE_URL = os.getenv("CREWS_SERVICE_URL", "http://localhost:8001")
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", API_SECRET_KEY)  # Use same secret
 INTERNAL_AUTH_TOKEN = os.getenv("INTERNAL_AUTH_TOKEN", "")
 

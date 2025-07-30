@@ -37,7 +37,7 @@ class Settings(BaseSettings):
         description="Memory service URL"
     )
     memory_internal_api_url: str = Field(
-        default=os.getenv("MEMORY_INTERNAL_API_URL", "http://localhost:8001"),
+        default=os.getenv("MEMORY_API_URL", "http://localhost:8001"),
         description="Memory internal API URL"
     )
     thinking_service_url: str = Field(

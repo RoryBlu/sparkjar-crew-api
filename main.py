@@ -19,7 +19,7 @@ from utils.chroma_client import test_chroma_connection
 from config import ENVIRONMENT, API_HOST, API_PORT, OPTIONAL_CONFIG
 
 # Import centralized configuration validation
-from shared.config.startup_validator import validate_service_startup, CommonChecks
+from sparkjar_shared.config.startup_validator import validate_service_startup, CommonChecks
 
 # Configure logging
 logging.basicConfig(

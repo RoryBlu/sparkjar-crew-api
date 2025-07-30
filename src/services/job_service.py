@@ -271,86 +271,79 @@ class JobService:
                 return
 
             elif object_type == "crew":
-                # Use the CREW_REGISTRY to get the handler
-                from .crews import CREW_REGISTRY
+                # Check feature flags for remote crew execution
+                from .feature_flags import get_feature_flags
+                from .crew_client import get_crew_client
                 
+                feature_flags = get_feature_flags()
                 crew_name = job.job_key
-                handler_class = CREW_REGISTRY.get(crew_name)
                 
-                if handler_class:
-                    # Use the new handler pattern
-                    logger.info(f"Using handler for crew: {crew_name}")
-                    crew_handler = handler_class()
-                    crew_handler.set_job_id(uuid.UUID(job_id))
+                # Check if this crew should use remote execution
+                if feature_flags.should_use_remote_crew(crew_name):
+                    logger.info(f"Using remote execution for crew: {crew_name}")
                     
-                    # Execute using the handler
-                    result = await crew_handler.execute(job.payload)
-                    
-                    # Update job with results
-                    await self._complete_job(job_id, result)
-                else:
-                    # Fallback to dynamic import for crews not yet in registry
-                    logger.warning(f"No handler found in registry for {crew_name}, using dynamic import")
-                    import importlib
-
-                    if crew_name.endswith("_context"):
-                        crew_name = crew_name[:-8]
-
-                    module_path = f"src.crews.{crew_name}.crew"
-                    logger.info(f"Importing crew module: {module_path}")
-
                     try:
-                        crew_module = importlib.import_module(module_path)
-                    except ModuleNotFoundError as e:
-                        logger.error(f"Import error details: {str(e)}")
-                        logger.error(f"Python path: {sys.path}")
-                        raise ValueError(
-                            f"Crew module '{module_path}' not found: {str(e)}"
-                        ) from e
-
-                    kickoff_fn = getattr(crew_module, "kickoff", None)
-                    if kickoff_fn is None:
-                        raise ValueError(f"'kickoff' not found in {module_path}")
-
-                    payload_context = getattr(job, "payload_context", None)
-                    if payload_context is None:
-                        # Check if payload has a key matching the crew_name
-                        if crew_name in job.payload:
-                            payload_context = job.payload[crew_name]
-                        else:
-                            payload_context = job.payload.get("context", job.payload)
-                    
-                    # Add client_user_id to context for email lookup
-                    if isinstance(payload_context, dict):
-                        payload_context['client_user_id'] = job.payload.get('client_user_id')
-                        # Add job_id to context for logger initialization
-                        payload_context['job_id'] = job_id
-
-                    enhanced_logger = EnhancedCrewLogger(uuid.UUID(job_id))
-                    try:
-                        loop = asyncio.get_running_loop()
-                        result = await loop.run_in_executor(
-                            None,
-                            lambda: kickoff_fn(inputs=payload_context, logger=enhanced_logger),
+                        # Use crew client for remote execution
+                        crew_client = get_crew_client()
+                        
+                        # Execute crew remotely
+                        result = await crew_client.execute_crew(
+                            crew_name=crew_name,
+                            inputs=job.payload,
+                            request_id=job_id
                         )
-
+                        
                         # Update job with results
                         await self._complete_job(job_id, result)
-                    finally:
-                        # Ensure logger is stopped after job completion
-                        enhanced_logger.stop()
+                        await self._add_job_event(
+                            job_id,
+                            "job_completed",
+                            {
+                                "message": "Job completed successfully via remote crew execution",
+                                "execution_type": "remote",
+                                "crew_name": crew_name,
+                                "execution_time": result.get("execution_time"),
+                                "total_time": result.get("total_time")
+                            }
+                        )
+                        logger.info(f"Job {job_id} completed successfully via remote execution")
+                        return
+                        
+                    except Exception as e:
+                        logger.error(f"Remote crew execution failed: {e}")
+                        
+                        # Check if fallback is enabled
+                        if feature_flags.should_fallback_to_local():
+                            logger.warning(f"Falling back to local execution for crew: {crew_name}")
+                            await self._add_job_event(
+                                job_id,
+                                "remote_execution_failed",
+                                {
+                                    "message": "Remote execution failed, falling back to local",
+                                    "error": str(e),
+                                    "crew_name": crew_name
+                                }
+                            )
+                            # Continue to local execution below
+                        else:
+                            # No fallback, fail the job
+                            raise
+                
+                # Local execution is no longer supported
+                logger.error(f"Local execution not available for crew: {crew_name}")
                 await self._add_job_event(
                     job_id,
-                    "job_completed",
+                    "local_execution_disabled",
                     {
-                        "message": "Job completed successfully using crew module",
-                        "result_summary": (
-                            str(result)[:200] if result else "No result summary"
-                        ),
-                    },
+                        "message": "Local crew execution has been disabled. Enable remote execution via feature flags.",
+                        "crew_name": crew_name,
+                        "suggestion": f"Set feature flag 'use_remote_crews_{crew_name}' to true"
+                    }
                 )
-                logger.info(f"Job {job_id} completed successfully")
-                return
+                raise ValueError(
+                    f"Local execution is disabled for crew '{crew_name}'. "
+                    f"Enable remote execution by setting feature flag 'use_remote_crews_{crew_name}' to true."
+                )
 
             else:
                 raise ValueError(
