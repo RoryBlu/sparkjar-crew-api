@@ -63,6 +63,7 @@ redis>=5.0.0
 
 # Additional monitoring
 sentry-sdk[fastapi]>=1.38.0
+prometheus-client>=0.18.0
 
 # Memory Service Client
 numpy>=1.24.0
