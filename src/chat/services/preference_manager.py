@@ -10,9 +10,9 @@ from typing import Dict, Any, Optional
 from uuid import UUID
 from datetime import datetime
 
-from src.chatclients.memory_service import MemoryServiceClient
-from src.chatmodels.memory_models import MemoryEntity, Observation
-from src.chatmodels.context_models import SynthContext
+from src.chat.clients.memory_service import MemoryServiceClient
+from src.chat.models.memory_models import MemoryEntity, Observation
+from src.chat.models.context_models import SynthContext
 
 logger = logging.getLogger(__name__)
 

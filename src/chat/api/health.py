@@ -9,13 +9,13 @@ import asyncio
 
 from fastapi import APIRouter, HTTPException, status
 
-from src.chatclients.memory_service import MemoryServiceClient
-from src.chatclients.thinking_service import ThinkingServiceClient
-from src.chatservices.session_manager import SessionContextStore
-from src.chatutils.metrics import metrics
-from src.chatutils.cache_manager import CacheManager
-from src.chatutils.connection_pool import ConnectionPoolManager
-from src.chatconfig import get_settings
+from src.chat.clients.memory_service import MemoryServiceClient
+from src.chat.clients.thinking_service import ThinkingServiceClient
+from src.chat.services.session_manager import SessionContextStore
+from src.chat.utils.metrics import metrics
+from src.chat.utils.cache_manager import CacheManager
+from src.chat.utils.connection_pool import ConnectionPoolManager
+from src.chat.config import get_settings
 
 logger = logging.getLogger(__name__)
 

@@ -12,9 +12,9 @@ from uuid import UUID
 import redis.asyncio as redis
 from cachetools import TTLCache
 
-from src.chatmodels.context_models import SynthContext
-from src.chatmodels.memory_models import MemoryEntity
-from src.chatconfig import get_settings
+from src.chat.models.context_models import SynthContext
+from src.chat.models.memory_models import MemoryEntity
+from src.chat.config import get_settings
 
 logger = logging.getLogger(__name__)
 

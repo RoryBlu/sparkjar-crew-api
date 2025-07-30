@@ -15,7 +15,7 @@ import httpx
 from httpx import AsyncClient, HTTPStatusError, ConnectError, TimeoutException
 from pydantic import BaseModel, Field
 
-from src.chatconfig import get_settings
+from src.chat.config import get_settings
 
 logger = logging.getLogger(__name__)
 

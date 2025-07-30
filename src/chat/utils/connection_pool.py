@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 import httpx
 from httpx import Limits, Timeout
 
-from src.chatconfig import get_settings
+from src.chat.config import get_settings
 
 logger = logging.getLogger(__name__)
 

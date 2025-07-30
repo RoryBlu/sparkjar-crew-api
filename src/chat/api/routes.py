@@ -7,8 +7,8 @@ from typing import Dict, Any
 import logging
 from uuid import UUID
 
-from src.chatconfig import get_settings
-from src.chatmodels.chat_models import ChatRequest, ChatResponse
+from src.chat.config import get_settings
+from src.chat.models.chat_models import ChatRequest, ChatResponse
 from .auth import TokenData, verify_chat_access
 from .chat_controller import ChatController
 

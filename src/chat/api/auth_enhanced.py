@@ -14,8 +14,8 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from pydantic import BaseModel
 
-from src.chatconfig import get_settings
-from src.chatutils.error_handler import ServiceError, ErrorCategory
+from src.chat.config import get_settings
+from src.chat.utils.error_handler import ServiceError, ErrorCategory
 
 logger = logging.getLogger(__name__)
 

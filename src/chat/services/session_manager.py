@@ -15,10 +15,10 @@ import redis.asyncio as redis
 from redis.asyncio.lock import Lock
 from redis.exceptions import RedisError, ConnectionError as RedisConnectionError
 
-from src.chatmodels.context_models import ConversationContext, SynthContext
-from src.chatmodels.chat_models import ChatMessage
-from src.chatconfig import get_settings
-from src.chatutils.error_handler import ChatErrorHandler, ServiceError, ErrorCategory
+from src.chat.models.context_models import ConversationContext, SynthContext
+from src.chat.models.chat_models import ChatMessage
+from src.chat.config import get_settings
+from src.chat.utils.error_handler import ChatErrorHandler, ServiceError, ErrorCategory
 
 logger = logging.getLogger(__name__)
 

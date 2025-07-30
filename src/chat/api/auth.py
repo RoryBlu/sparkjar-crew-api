@@ -12,7 +12,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from pydantic import BaseModel
 
-from src.chatconfig import get_settings
+from src.chat.config import get_settings
 
 logger = logging.getLogger(__name__)
 

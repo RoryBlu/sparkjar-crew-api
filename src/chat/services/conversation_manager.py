@@ -12,14 +12,14 @@ from uuid import UUID, uuid4
 
 from openai import AsyncOpenAI
 
-from src.chatmodels.chat_models import ChatMessage, ChatRequest, ChatResponse
-from src.chatmodels.context_models import ConversationContext, SynthContext
-from src.chatmodels.memory_models import MemoryEntity
-from src.chatclients.memory_service import MemoryServiceClient
-from src.chatclients.thinking_service import ThinkingServiceClient
-from src.chatconfig import get_settings
+from src.chat.models.chat_models import ChatMessage, ChatRequest, ChatResponse
+from src.chat.models.context_models import ConversationContext, SynthContext
+from src.chat.models.memory_models import MemoryEntity
+from src.chat.clients.memory_service import MemoryServiceClient
+from src.chat.clients.thinking_service import ThinkingServiceClient
+from src.chat.config import get_settings
 from .session_manager import SessionManager
-from src.chatutils.error_handler import ChatErrorHandler, ErrorRecovery, ServiceError, ErrorCategory
+from src.chat.utils.error_handler import ChatErrorHandler, ErrorRecovery, ServiceError, ErrorCategory
 
 logger = logging.getLogger(__name__)
 

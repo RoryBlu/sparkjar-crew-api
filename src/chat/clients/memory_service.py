@@ -13,9 +13,9 @@ from uuid import UUID
 import httpx
 from httpx import AsyncClient, HTTPStatusError, ConnectError, TimeoutException
 
-from src.chatmodels.context_models import SynthContext
-from src.chatmodels.memory_models import MemoryEntity, Observation
-from src.chatconfig import get_settings
+from src.chat.models.context_models import SynthContext
+from src.chat.models.memory_models import MemoryEntity, Observation
+from src.chat.config import get_settings
 
 logger = logging.getLogger(__name__)
 

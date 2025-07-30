@@ -8,7 +8,7 @@ import json
 from typing import Dict, Any
 from datetime import datetime
 
-from src.chatconfig import get_settings
+from src.chat.config import get_settings
 
 
 def setup_logging():
