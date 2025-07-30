@@ -6,7 +6,7 @@ from typing import Dict, Any, List
 import jwt
 from datetime import datetime, timedelta
 import logging
-from sparkjar_crew.shared.config.shared_settings import (
+from sparkjar_shared.config.shared_settings import (
     JWT_SECRET_KEY, JWT_ALGORITHM, TOKEN_DEFAULT_EXPIRY_HOURS, 
     TOKEN_MAX_EXPIRY_HOURS, TOKEN_AVAILABLE_SCOPES, TOKEN_DEFAULT_SCOPES,
     ENVIRONMENT
