@@ -49,6 +49,10 @@
       "required": true,
       "description": "ChromaDB authentication token"
     },
+    "CHROMA_PORT": {
+      "default": "8000",
+      "description": "ChromaDB server port"
+    },
     "MEMORY_INTERNAL_API_URL": {
       "default": "http://memory-internal.railway.internal:8001",
       "description": "Internal memory service URL"
