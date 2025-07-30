@@ -13,8 +13,7 @@ from uuid import UUID, uuid4
 from openai import AsyncOpenAI
 
 from src.chat.models.chat_models import ChatMessage, ChatRequest, ChatResponse
-from src.chat.models.context_models import ConversationContext, SynthContext
-from src.chat.models.memory_models import MemoryEntity
+from src.chat.models.context_models import ConversationContext, SynthContext, MemoryEntity
 from src.chat.clients.memory_service import MemoryServiceClient
 from src.chat.clients.thinking_service import ThinkingServiceClient
 from src.chat.config import get_settings
