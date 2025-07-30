@@ -21,8 +21,8 @@ COPY main.py .
 # Create directories for generated crews
 RUN mkdir -p src/crews/generated
 
-# Set Python path
-ENV PYTHONPATH=/app:$PYTHONPATH
+# Set Python path to include both /app and /app/src
+ENV PYTHONPATH=/app:/app/src:$PYTHONPATH
 ENV PYTHONUNBUFFERED=1
 
 # Expose port
