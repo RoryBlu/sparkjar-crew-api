@@ -25,8 +25,8 @@ python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
 pyjwt>=2.9.0
 
-# Vector Databases - Compatible with CrewAI 0.148.0
-chromadb==1.0.15
+# Vector Databases - Let CrewAI manage chromadb client version
+# chromadb is included as a dependency of CrewAI (client mode)
 
 # LLM and Embeddings - Compatible versions
 openai>=1.13.3
