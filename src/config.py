@@ -10,7 +10,8 @@ import os
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 MEMORY_SERVICE_URL = os.getenv("MEMORY_SERVICE_URL", "http://localhost:8003")
 THINKING_SERVICE_URL = os.getenv("THINKING_SERVICE_URL", "http://localhost:8004")
-CREW_API_URL = os.getenv("CREW_API_URL", "http://localhost:8000")
+# REMOVED BY RORY - CREW_API_URL should not be referenced within its own repo
+# CREW_API_URL = os.getenv("CREW_API_URL", "http://localhost:8000")
 CREWS_SERVICE_URL = os.getenv("CREWS_SERVICE_URL", "http://localhost:8001")
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", API_SECRET_KEY)  # Use same secret
 INTERNAL_AUTH_TOKEN = os.getenv("INTERNAL_AUTH_TOKEN", "")
@@ -48,11 +49,12 @@ def validate_crew_api_config() -> bool:
         
         # Check optional but recommended configurations
         crew_api_warnings = []
-        if not os.getenv("GOOGLE_API_KEY") and not os.getenv("SERPER_API_KEY"):
-            crew_api_warnings.append("No search API keys configured (GOOGLE_API_KEY or SERPER_API_KEY)")
-        
-        if not os.getenv("NVIDIA_NIM_API_KEY"):
-            crew_api_warnings.append("NVIDIA_NIM_API_KEY not configured - OCR functionality will be limited")
+        # REMOVED BY RORY - These env vars are not used in this repo
+        # if not os.getenv("GOOGLE_API_KEY") and not os.getenv("SERPER_API_KEY"):
+        #     crew_api_warnings.append("No search API keys configured (GOOGLE_API_KEY or SERPER_API_KEY)")
+        # 
+        # if not os.getenv("NVIDIA_NIM_API_KEY"):
+        #     crew_api_warnings.append("NVIDIA_NIM_API_KEY not configured - OCR functionality will be limited")
             
         if not THINKING_SERVICE_URL:
             crew_api_warnings.append("THINKING_SERVICE_URL not configured - sequential thinking will be unavailable")
@@ -80,6 +82,8 @@ def validate_crew_api_config() -> bool:
         logger.error(f"❌ Crew API configuration validation error: {str(e)}")
         return False
 
+# REMOVED BY RORY - SKIP_CONFIG_VALIDATION not used
 # Run crew-api specific validation on import
-if not os.getenv("SKIP_CONFIG_VALIDATION", "").lower() == "true":
-    validate_crew_api_config()
+# if not os.getenv("SKIP_CONFIG_VALIDATION", "").lower() == "true":
+#     validate_crew_api_config()
+validate_crew_api_config()

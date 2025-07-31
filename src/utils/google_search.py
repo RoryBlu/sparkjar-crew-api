@@ -20,12 +20,15 @@ def search_web(query: str, num_results: int = 3) -> List[Dict[str, str]]:
     Returns:
         List of search results with title, link, and snippet
     """
-    google_api_key = os.getenv('GOOGLE_API_KEY')
-    google_cse_id = os.getenv('GOOGLE_CSE_ID')
-    
-    if not google_api_key or not google_cse_id:
-        logger.warning("Google API credentials not configured. Returning empty results.")
-        return []
+    # REMOVED BY RORY - GOOGLE_API_KEY and GOOGLE_CSE_ID not used in this repo
+    # google_api_key = os.getenv('GOOGLE_API_KEY')
+    # google_cse_id = os.getenv('GOOGLE_CSE_ID')
+    # 
+    # if not google_api_key or not google_cse_id:
+    #     logger.warning("Google API credentials not configured. Returning empty results.")
+    #     return []
+    logger.warning("Google search disabled - REMOVED BY RORY")
+    return []
     
     try:
         url = os.getenv("GOOGLE_SEARCH_API_URL", "https://www.googleapis.com/customsearch/v1")

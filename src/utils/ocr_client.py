@@ -41,11 +41,16 @@ class OCRClient:
         Args:
             api_key: NVIDIA NIM API key. If not provided, uses NVIDIA_NIM_API_KEY env var.
         """
-        self.api_key = api_key or os.getenv("NVIDIA_NIM_API_KEY")
+        # REMOVED BY RORY - NVIDIA_NIM_API_KEY not used in this repo
+        # self.api_key = api_key or os.getenv("NVIDIA_NIM_API_KEY")
+        # if not self.api_key:
+        #     raise ValueError("NVIDIA_NIM_API_KEY not found in environment or provided")
+        # 
+        # self.endpoint = os.getenv("NVIDIA_OCR_ENDPOINT", "https://ai.api.nvidia.com/v1/cv/baidu/paddleocr")
+        self.api_key = api_key
         if not self.api_key:
-            raise ValueError("NVIDIA_NIM_API_KEY not found in environment or provided")
-        
-        self.endpoint = os.getenv("NVIDIA_OCR_ENDPOINT", "https://ai.api.nvidia.com/v1/cv/baidu/paddleocr")
+            raise ValueError("API key must be provided")
+        self.endpoint = "https://ai.api.nvidia.com/v1/cv/baidu/paddleocr"
         self.client = httpx.Client(timeout=30.0)
         
     def _encode_image(self, image_source: Union[str, Path, bytes]) -> str:

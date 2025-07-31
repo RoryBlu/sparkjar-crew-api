@@ -30,7 +30,9 @@ class ScrapeRequest(BaseModel):
     script: Optional[str] = None
 
 _REDIS: redis.Redis | None = None
-_SESSION_TTL = int(os.getenv("SCRAPER_SESSION_TTL", "300"))
+# REMOVED BY RORY - SCRAPER_SESSION_TTL not used in this repo
+# _SESSION_TTL = int(os.getenv("SCRAPER_SESSION_TTL", "300"))
+_SESSION_TTL = 300
 
 async def _get_redis() -> redis.Redis:
     """Return a Redis client."""

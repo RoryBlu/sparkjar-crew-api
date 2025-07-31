@@ -48,10 +48,12 @@ class Settings(BaseSettings):
         default="http://localhost:8000",
         description="Crew API service URL"
     )
-    mcp_registry_url: str = Field(
-        default=os.getenv("MCP_REGISTRY_URL", "http://localhost:8000"),
-        description="MCP Registry URL"
-    )
+    # REMOVED BY RORY - MCP_REGISTRY_URL not used in this repo (use direct MCP server references)
+    # mcp_registry_url: str = Field(
+    #     default=os.getenv("MCP_REGISTRY_URL", "http://localhost:8000"),
+    #     description="MCP Registry URL"
+    # )
+    mcp_registry_url: str = "http://localhost:8000"
     
     # JWT configuration
     jwt_secret_key: str = Field(
@@ -116,11 +118,13 @@ class Settings(BaseSettings):
         description="OpenAI API key"
     )
     
-    # Monitoring
-    sentry_dsn: Optional[str] = Field(
-        default=os.getenv("SENTRY_DSN"),
-        description="Sentry DSN for error tracking"
-    )
+    # REMOVED BY RORY - SENTRY_DSN not used in this repo
+    # # Monitoring
+    # sentry_dsn: Optional[str] = Field(
+    #     default=os.getenv("SENTRY_DSN"),
+    #     description="Sentry DSN for error tracking"
+    # )
+    sentry_dsn: Optional[str] = None
     
     # Logging configuration
     log_level: str = Field(default="INFO", description="Logging level")

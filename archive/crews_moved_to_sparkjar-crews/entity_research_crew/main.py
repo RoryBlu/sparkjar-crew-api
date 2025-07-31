@@ -114,7 +114,9 @@ Examples:
         logger.info("=" * 50)
         
         # Process and display results
-        if args.detailed or os.getenv('VERBOSE', '').lower() == 'true':
+        # REMOVED BY RORY - VERBOSE not used in this repo
+        # if args.detailed or os.getenv('VERBOSE', '').lower() == 'true':
+        if args.detailed:
             # Show full detailed output
             logger.info("\n📋 Detailed Research Results:")
             logger.info("-" * 40)

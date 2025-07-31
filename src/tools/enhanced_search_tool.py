@@ -50,33 +50,40 @@ class EnhancedSearchTool:
         """Initialize available search providers"""
         self.providers = {}
         
-        # Setup Google Grounding if API key available
-        google_api_key = os.getenv("GOOGLE_API_KEY")
-        if google_api_key:
-            try:
-                genai.configure(api_key=google_api_key)
-                self.providers["google_grounding"] = True
-                logger.info("✅ Google Search grounding available")
-            except Exception as e:
-                logger.error("⚠️  Google Search grounding setup failed: %s", e)
-                self.providers["google_grounding"] = False
-        else:
-            self.providers["google_grounding"] = False
+        # REMOVED BY RORY - GOOGLE_API_KEY not used in this repo
+        # # Setup Google Grounding if API key available
+        # google_api_key = os.getenv("GOOGLE_API_KEY")
+        # if google_api_key:
+        #     try:
+        #         genai.configure(api_key=google_api_key)
+        #         self.providers["google_grounding"] = True
+        #         logger.info("✅ Google Search grounding available")
+        #     except Exception as e:
+        #         logger.error("⚠️  Google Search grounding setup failed: %s", e)
+        #         self.providers["google_grounding"] = False
+        # else:
+        #     self.providers["google_grounding"] = False
+        self.providers["google_grounding"] = False
             
-        # Setup SERPER if API key available
-        serper_api_key = os.getenv("SERPER_API_KEY")
-        if serper_api_key:
-            try:
-                self.serper_tool = SerperDevTool(
-                    search_url=self.config.serper_search_url,
-                    n_results=self.config.max_results,
-                    country=self.config.country,
-                    locale=self.config.locale,
-                    location=self.config.location
-                )
-                self.providers["serper"] = True
-                logger.info("✅ SERPER search available")
-            except Exception as e:
+        # REMOVED BY RORY - SERPER_API_KEY not used in this repo
+        # # Setup SERPER if API key available
+        # serper_api_key = os.getenv("SERPER_API_KEY")
+        # if serper_api_key:
+        #     try:
+        #         self.serper_tool = SerperDevTool(
+        #             search_url=self.config.serper_search_url,
+        #             n_results=self.config.max_results,
+        #             country=self.config.country,
+        #             locale=self.config.locale,
+        #             location=self.config.location
+        #         )
+        #         self.providers["serper"] = True
+        #         logger.info("✅ SERPER search available")
+        #     except Exception as e:
+        self.providers["serper"] = False
+        try:
+            pass
+        except Exception as e:
                 logger.error("⚠️  SERPER search setup failed: %s", e)
                 self.providers["serper"] = False
         else:
@@ -267,5 +274,6 @@ if __name__ == "__main__":
             logger.error("\n❌ Search failed: %s", e)
     else:
         logger.warning("\n⚠️  No search providers available. Please check your API keys:")
-        logger.warning("  • GOOGLE_API_KEY: %s", '✅ Set' if os.getenv('GOOGLE_API_KEY') else '❌ Missing')
-        logger.warning("  • SERPER_API_KEY: %s", '✅ Set' if os.getenv('SERPER_API_KEY') else '❌ Missing')
+        # REMOVED BY RORY - These env vars not used
+        # logger.warning("  • GOOGLE_API_KEY: %s", '✅ Set' if os.getenv('GOOGLE_API_KEY') else '❌ Missing')
+        # logger.warning("  • SERPER_API_KEY: %s", '✅ Set' if os.getenv('SERPER_API_KEY') else '❌ Missing')

@@ -180,7 +180,9 @@ Examples:
                     logger.info(f"  - {error}")
             
             # Show raw result in verbose mode
-            if os.getenv('VERBOSE', '').lower() == 'true':
+            # REMOVED BY RORY - VERBOSE not used in this repo
+            # if os.getenv('VERBOSE', '').lower() == 'true':
+            if False:  # Disabled - use logging instead
                 logger.info(f"\n📋 Full Result:")
                 logger.info(json.dumps(result, indent=2))
         else:
