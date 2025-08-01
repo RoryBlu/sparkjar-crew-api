@@ -9,7 +9,7 @@ from uuid import UUID
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
-from src.tools.sj_memory_tool_hierarchical import SJMemoryToolHierarchical
+from sparkjar_shared.tools.memory.sj_memory_tool_hierarchical import SJMemoryToolHierarchical
 
 
 @CrewBase

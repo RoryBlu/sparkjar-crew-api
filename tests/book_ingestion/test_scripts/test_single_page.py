@@ -11,8 +11,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-from tools.google_drive_tool import GoogleDriveTool
-from tools.image_viewer_tool import ImageViewerTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.image_viewer_tool import ImageViewerTool
 import json
 
 async def test_single_page():

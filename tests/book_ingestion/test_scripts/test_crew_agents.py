@@ -5,9 +5,9 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'services/crew-api/src'))
 
 from crewai import Agent, Task, Crew, Process
-from tools.google_drive_tool import GoogleDriveTool
-from tools.image_viewer_tool import ImageViewerTool
-from tools.simple_db_storage_tool import SimpleDBStorageTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.image_viewer_tool import ImageViewerTool
+from sparkjar_shared.tools.simple_db_storage_tool import SimpleDBStorageTool
 import json
 import time
 import logging

@@ -13,7 +13,7 @@ import asyncio
 from datetime import datetime
 
 from config import API_HOST, API_PORT, ENVIRONMENT
-from utils.chroma_client import test_chroma_connection
+from sparkjar_shared.utils.chroma_client import test_chroma_connection
 from api.models import (
     CrewJobRequest, CrewJobResponse, HealthResponse, 
     SchemaValidationResponse, ValidationErrorResponse,

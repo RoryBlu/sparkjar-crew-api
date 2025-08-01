@@ -16,8 +16,8 @@ from api.models import CrewJobRequest, JobStatus, JobStatusResponse
 from database.connection import get_direct_session
 from database.models import CrewJobEvent, CrewJobs
 
-from utils.crew_logger import CrewExecutionLogger
-from utils.enhanced_crew_logger import EnhancedCrewLogger
+from sparkjar_shared.utils.crew_logger import CrewExecutionLogger
+from sparkjar_shared.utils.enhanced_crew_logger import EnhancedCrewLogger
 
 logger = logging.getLogger(__name__)
 

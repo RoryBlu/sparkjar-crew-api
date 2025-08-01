@@ -12,9 +12,9 @@ from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool, FileReadTool, DirectorySearchTool
 
 from config import OPENAI_API_KEY, ENVIRONMENT
-from utils.chroma_client import ChromaClient
+from sparkjar_shared.utils.chroma_client import ChromaClient
 from services.mcp_service import MCPService
-from utils.crew_logger import CrewExecutionLogger
+from sparkjar_shared.utils.crew_logger import CrewExecutionLogger
 
 logger = logging.getLogger(__name__)
 

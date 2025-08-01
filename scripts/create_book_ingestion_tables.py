@@ -93,7 +93,7 @@ CREATE TRIGGER update_book_ingestions_updated_at BEFORE UPDATE
 
 def get_database_url(client_id: str):
     """Get client database URL from secrets table."""
-    from src.utils.secret_manager import SecretManager
+    from sparkjar_shared.utils.secret_manager import SecretManager
     
     # Get from database secrets
     db_url = SecretManager.get_client_secret(client_id, "database_url")

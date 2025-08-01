@@ -7,10 +7,10 @@ from typing import Dict, Any, List
 import json
 
 # Import needed tools
-from tools.google_drive_tool import GoogleDriveTool
-from tools.image_viewer_tool import ImageViewerTool
-from tools.sj_sequential_thinking_tool import SJSequentialThinkingTool
-from tools.sj_memory_tool import SJMemoryTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.image_viewer_tool import ImageViewerTool
+from sparkjar_shared.tools.memory.sj_sequential_thinking_tool import SJSequentialThinkingTool
+from sparkjar_shared.tools.memory.sj_memory_tool import SJMemoryTool
 
 # Import our utility functions
 from utils import parse_baron_filename, sort_book_files

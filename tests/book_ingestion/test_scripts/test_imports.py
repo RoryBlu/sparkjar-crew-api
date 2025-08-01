@@ -56,7 +56,7 @@ try:
         print(f"   ⚠️  Book ingestion crew import issue: {e}")
 
     try:
-        from tools.google_drive_tool import GoogleDriveTool
+        from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
         print("   Google Drive tool imported successfully")
     except Exception as e:
         print(f"   ⚠️  Google Drive tool import issue: {e}")

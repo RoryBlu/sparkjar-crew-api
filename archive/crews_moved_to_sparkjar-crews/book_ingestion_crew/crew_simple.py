@@ -11,9 +11,9 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.tools.google_drive_tool import GoogleDriveTool
-from src.tools.image_viewer_tool import ImageViewerTool
-from src.tools.simple_db_storage_tool import SimpleDBStorageTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.image_viewer_tool import ImageViewerTool
+from sparkjar_shared.tools.simple_db_storage_tool import SimpleDBStorageTool
 
 # Import our utility functions
 from utils import parse_baron_filename, sort_book_files

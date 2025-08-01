@@ -22,8 +22,8 @@ from .models import (
 )
 
 # Import tools
-from src.tools.sj_memory_tool import SJMemoryTool
-from src.tools.sj_sequential_thinking_tool import SJSequentialThinkingTool
+from sparkjar_shared.tools.memory.sj_memory_tool import SJMemoryTool
+from sparkjar_shared.tools.memory.sj_sequential_thinking_tool import SJSequentialThinkingTool
 from services.mcp_service import mcp_service
 
 logger = logging.getLogger(__name__)

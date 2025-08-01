@@ -7,7 +7,7 @@ import sys
 # Add the crew-api src directory to the path
 sys.path.insert(0, '/Users/r.t.rawlings/sparkjar-crew/services/crew-api/src')
 
-from tools.paddle_ocr_tool import PaddleOCRTool
+from sparkjar_shared.tools.paddle_ocr_tool import PaddleOCRTool
 
 def test_paddle_ocr_url():
     # Initialize the tool

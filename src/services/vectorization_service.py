@@ -8,7 +8,7 @@ import logging
 from typing import List, Dict, Any, Optional
 import httpx
 from config import EMBEDDINGS_API_URL, EMBEDDING_MODEL, EMBEDDING_DIMENSION
-from utils.embedding_client import EmbeddingClient
+from sparkjar_shared.utils.embedding_client import EmbeddingClient
 
 from sqlalchemy import select, text
 from database.connection import get_direct_session

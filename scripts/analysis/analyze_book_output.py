@@ -19,8 +19,8 @@ import os
 script_dir = Path(__file__).parent
 crew_api_root = script_dir.parent.parent
 
-from tools.google_drive_tool import GoogleDriveTool
-from tools.ocr_tool import OCRTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.document.ocr_tool import OCRTool
 
 class BookOutputAnalyzer:
     """Analyzes book ingestion crew output quality."""

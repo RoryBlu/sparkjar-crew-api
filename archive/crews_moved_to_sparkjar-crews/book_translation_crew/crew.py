@@ -10,8 +10,8 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.tools.simple_db_storage_tool import SimpleDBStorageTool
-from src.tools.simple_db_query_tool import SimpleDBQueryTool
+from sparkjar_shared.tools.simple_db_storage_tool import SimpleDBStorageTool
+from sparkjar_shared.tools.simple_db_query_tool import SimpleDBQueryTool
 
 logger = logging.getLogger(__name__)
 

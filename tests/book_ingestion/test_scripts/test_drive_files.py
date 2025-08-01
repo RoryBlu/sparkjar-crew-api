@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'services/crew-api/src'))
 
-from tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
 import json
 
 def test_drive_listing():

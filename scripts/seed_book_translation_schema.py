@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, text
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from src.database.connection import get_db_engine
-from src.utils.crew_logger import setup_logging
+from sparkjar_shared.utils.crew_logger import setup_logging
 
 logger = setup_logging(__name__)
 

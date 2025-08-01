@@ -12,7 +12,7 @@ from typing import Any, Dict, List
 import yaml
 from crewai import Agent, Crew, Process, Task
 
-from tools.sj_memory_tool import SJMemoryTool
+from sparkjar_shared.tools.memory.sj_memory_tool import SJMemoryTool
 
 CONFIG_DIR = Path(__file__).resolve().parent / "config"
 

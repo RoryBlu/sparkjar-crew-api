@@ -14,8 +14,8 @@ import logging
 # Add project root to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from src.utils.secret_manager import SecretManager
-from src.utils.crew_logger import setup_logging
+from sparkjar_shared.utils.secret_manager import SecretManager
+from sparkjar_shared.utils.crew_logger import setup_logging
 
 logger = setup_logging(__name__)
 

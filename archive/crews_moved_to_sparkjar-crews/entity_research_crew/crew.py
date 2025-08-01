@@ -6,14 +6,14 @@ from crewai import Agent, Crew, Process, Task
 
 logger = logging.getLogger(__name__)
 
-from utils.enhanced_crew_logger import EnhancedCrewLogger
+from sparkjar_shared.utils.enhanced_crew_logger import EnhancedCrewLogger
 # Import tools
-from tools.sj_memory_tool import SJMemoryTool
-from tools.sj_sequential_thinking_tool import SJSequentialThinkingTool
-from tools.sj_document_tool import SJDocumentTool
-from tools.gmail_api_sender_tool import GmailAPISenderTool
+from sparkjar_shared.tools.memory.sj_memory_tool import SJMemoryTool
+from sparkjar_shared.tools.memory.sj_sequential_thinking_tool import SJSequentialThinkingTool
+from sparkjar_shared.tools.document.sj_document_tool import SJDocumentTool
+from sparkjar_shared.tools.gmail_api_sender_tool import GmailAPISenderTool
 # Import custom tools
-from tools.google_search_tool import GoogleSearchTool
+from sparkjar_shared.tools.search.google_search_tool import GoogleSearchTool
 
 CONFIG_DIR = Path(__file__).parent / "config"
 

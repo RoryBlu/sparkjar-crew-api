@@ -1,30 +1,18 @@
 """
-Custom tools package for SparkJar CrewAI application.
+SparkJAR Tools - Redirects to sparkjar-shared
+
+All tools have been moved to sparkjar-shared to avoid code duplication.
+This module provides backward compatibility by re-exporting from the shared location.
 """
 
-# Import available tools for easy access
-try:
-    from .context_query_tool import ContextQueryTool
-    from .pdf_generator import PDFGeneratorTool
-    from .sj_memory_tool import SJMemoryTool
-    from .sj_memory_tool_hierarchical import (
-        SJMemoryToolHierarchical,
-        HierarchicalMemoryConfig,
-        create_hierarchical_memory_tool
-    )
-    from .sj_sequential_thinking_tool import SJSequentialThinkingTool
-    from .sj_document_tool import SJDocumentTool
-    
-    __all__ = [
-        'ContextQueryTool',
-        'PDFGeneratorTool',
-        'SJMemoryTool',
-        'SJMemoryToolHierarchical',
-        'HierarchicalMemoryConfig',
-        'create_hierarchical_memory_tool',
-        'SJSequentialThinkingTool',
-        'SJDocumentTool'
-    ]
-except ImportError:
-    # Handle case where dependencies might not be available
-    __all__ = []
+# Re-export everything from sparkjar-shared.tools
+from sparkjar_shared.tools import *
+
+# Provide a deprecation notice
+import warnings
+warnings.warn(
+    f"Importing from {__name__} is deprecated. "
+    f"Please import directly from sparkjar_shared.tools instead.",
+    DeprecationWarning,
+    stacklevel=2
+)

@@ -9,7 +9,7 @@ import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 from uuid import uuid4
 
-from src.tools.sj_memory_tool_hierarchical import (
+from sparkjar_shared.tools.memory.sj_memory_tool_hierarchical import (
     SJMemoryToolHierarchical,
     HierarchicalMemoryConfig,
     create_hierarchical_memory_tool

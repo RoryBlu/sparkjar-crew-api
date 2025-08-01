@@ -20,10 +20,10 @@ crew_api_src = os.path.join(os.getcwd(), "services", "crew-api", "src")
 sys.path.insert(0, crew_api_src)
 
 # Import tools
-from tools.google_drive_tool import GoogleDriveTool
-from tools.image_viewer_tool import ImageViewerTool
-from tools.sj_sequential_thinking_tool import SJSequentialThinkingTool
-from tools.database_storage_tool import DatabaseStorageTool
+from sparkjar_shared.tools.google_drive_tool import GoogleDriveTool
+from sparkjar_shared.tools.image_viewer_tool import ImageViewerTool
+from sparkjar_shared.tools.memory.sj_sequential_thinking_tool import SJSequentialThinkingTool
+from sparkjar_shared.tools.database.database_storage_tool import DatabaseStorageTool
 
 # Load configurations
 config_dir = Path("services/crew-api/src/crews/book_ingestion_crew/config")

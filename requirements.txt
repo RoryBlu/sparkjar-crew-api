@@ -1,17 +1,14 @@
-# SparkJAR Crew API Requirements
-# Based on CrewAI 0.148.0 and actual codebase usage
-# ChromaDB is included as a dependency of CrewAI (client mode)
+# SparkJAR Standardized Requirements
+# Core CrewAI - Using consistent version across all services
+crewai==0.148.0
+crewai-tools>=0.51.1
 
-# Core CrewAI - Using older version for macOS 10.15 compatibility
-crewai==0.65.2
-# crewai-tools>=0.51.1  # Temporarily disabled for testing
-
-# API Framework - Compatible versions
+# API Framework
 fastapi==0.116.1
 uvicorn[standard]==0.35.0
 python-multipart>=0.0.6
 
-# Database - Compatible with CrewAI
+# Database
 sqlalchemy==2.0.41
 psycopg2-binary>=2.9.9
 asyncpg>=0.30.0
@@ -23,15 +20,16 @@ python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
 pyjwt>=2.9.0
 
-# Vector Databases - Compatible with CrewAI 0.148.0
-# Let CrewAI manage chromadb version
-# chromadb==1.0.15
+# Vector Databases - Let CrewAI manage chromadb version
+# chromadb managed by CrewAI
 
-# LLM and Embeddings - Compatible versions
+# LLM and Embeddings
 openai>=1.13.3
 tiktoken>=0.5.2
+langchain>=0.0.350
+langchain-community>=0.0.10
 
-# Utilities - Compatible with CrewAI
+# Utilities
 python-dotenv>=1.0.0
 pydantic==2.11.7
 pyyaml>=6.0.0
@@ -40,7 +38,7 @@ requests>=2.31.0
 cachetools>=5.3.0
 tenacity>=8.2.0
 
-# Google Drive Integration - Compatible versions
+# Google Drive Integration
 google-api-python-client==2.176.0
 google-auth-httplib2>=0.1.1
 google-auth-oauthlib>=1.1.0
@@ -49,27 +47,19 @@ google-auth-oauthlib>=1.1.0
 pypdf>=3.17.0
 python-docx>=1.0.0
 beautifulsoup4>=4.12.0
-fpdf2>=2.7.0
 Pillow>=10.0.0
 
-# Email
-sendgrid>=6.11.0
-
-# Chat Interface Dependencies
-redis>=5.0.0
-structlog>=24.1.0
-prometheus-client>=0.19.0
-
-# Schema Validation
-jsonschema>=4.20.0
-
-# Browser automation (optional)
+# Web Scraping
 playwright>=1.49.1
+selenium>=4.15.0
+psutil>=5.9.0
 
 # Testing
-pytest>=7.4.0
+pytest>=7.0.0
 pytest-asyncio>=0.21.0
-pytest-mock>=3.12.0
 
-# Shared SparkJAR Package
-git+https://github.com/RoryBlu/sparkjar-shared.git@main#egg=sparkjar-shared
+# SparkJAR Shared Package - Local installation
+-e file:///Users/r.t.rawlings/sparkjar-crew/_reorg/sparkjar-shared
+
+# API-specific dependencies
+# None currently

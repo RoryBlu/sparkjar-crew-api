@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'services/crew-api/src'))
 
 from crewai import Agent, Task, Crew, Process
-from tools.image_viewer_tool import ImageViewerTool
+from sparkjar_shared.tools.image_viewer_tool import ImageViewerTool
 import time
 
 def test_simple_crew():
